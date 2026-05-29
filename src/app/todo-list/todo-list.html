@@ -1,0 +1,12 @@
+<div>
+    @for(todo of todos; track todo.id){
+    <div class="todo-item">
+        <input type="checkbox" [checked]="todo.completed">
+        <div>{{todo.name}}</div>
+    </div>
+    }
+</div>
+
+<button class="add-fab" (click)="openForm()">
+    <mat-icon>add</mat-icon>
+</button>
