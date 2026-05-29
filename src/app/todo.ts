@@ -7,8 +7,6 @@ import { DatabaseService } from './database';
   providedIn: 'root',
 })
 export class TodoService {
-  private todos: Todo[] = [];
-  private nextId = 1;
 
   constructor(private db: DatabaseService) {}
 
@@ -25,12 +23,15 @@ export class TodoService {
     await this.db.add(todo.name);
   }
 
-  deleteTodo(id: number): void {
-    this.todos = this.todos.filter(t => t.id !== id);
+  async deleteTodo(id: number): Promise<void> {
+    await this.db.delete(id);
   }
 
-  toggleTodo(id: number): void {
-    const todo = this.todos.find(t => t.id === id);
-    if (todo) todo.completed = !todo.completed;
+  async toggleTodo(id: number): Promise<void> {
+    const todos = await this.getTodos();
+    const todo = todos.find(t => t.id === id);
+    if (todo) {
+      await this.db.toggle(id, !todo.completed);
+    }
   }
 }

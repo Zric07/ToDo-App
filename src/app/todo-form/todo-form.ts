@@ -14,12 +14,15 @@ export class TodoForm {
   todoService = inject(TodoService);
   router = inject(Router);
 
-  save(){
-    this.todoService.addTodo({
-      name: this.name, completed: false,
-      id: 0
-    });
-    this.router.navigate(['/']);
+  async save() {
+    if (this.name.trim()) {
+      await this.todoService.addTodo({
+        name: this.name,
+        completed: false,
+        id: 0
+      });
+      this.router.navigate(['/']);
+    }
   }
 
 }

@@ -24,4 +24,14 @@ export class TodoList {
   openForm(){
     this.router.navigate(['/form']);
   }
+
+  async toggle(todo: Todo) {
+    await this.todoService.toggleTodo(todo.id);
+    this.todos = await this.todoService.getTodos();
+  }
+
+  async delete(todo: Todo) {
+    await this.todoService.deleteTodo(todo.id);
+    this.todos = await this.todoService.getTodos();
+  }
 }
