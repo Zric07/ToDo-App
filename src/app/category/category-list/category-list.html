@@ -1,0 +1,27 @@
+<div class="header-row">
+    <div class="categoryCount">{{categories.length}} @if(categories.length == 1){
+        Kategorie
+    }@else{
+        Kategorien
+    }</div>
+</div>
+
+<div class="categoryContainer">
+    @for(category of categories; track category.id){
+    <div class="category-item" (click)="toggleCategory(category.id)">
+        <div>
+            <div class="category-name">{{category.name}}</div>
+            <div class="task-count">{{getTaskCount(category.id)}} Aufgaben</div>
+        </div>
+        <button class="delete-btn" (click)="$event.stopPropagation(); delete(category)">
+            <mat-icon>delete</mat-icon>
+        </button>
+    </div>
+    }@empty{
+    <div class="empty">Keine Kategorien erstellt</div>
+    }
+</div>
+
+<button class="add" (click)="openForm()">
+    <mat-icon>add</mat-icon>
+</button>

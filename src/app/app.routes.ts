@@ -1,8 +1,13 @@
 import { Routes } from '@angular/router';
-import { TodoList } from './todo-list/todo-list';
-import { TodoForm } from './todo-form/todo-form';
+import { TaskList } from './task/task-list/task-list';
+import { TaskForm } from './task/task-form/task-form';
+import { CategoryList } from './category/category-list/category-list';
+import { CategoryForm } from './category/category-form/category-form';
 
 export const routes: Routes = [
-    { path: '', component: TodoList },
-    { path: 'form', component: TodoForm }
+    { path: '', component: CategoryList },
+    { path: 'categoryForm', component: CategoryForm },
+
+    { path: 'taskList', component: TaskList },
+    { path: 'taskForm', component: TaskForm }
 ];

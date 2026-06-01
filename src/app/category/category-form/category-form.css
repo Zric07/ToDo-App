@@ -1,22 +1,17 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    background: #f0f0f0;
-    font-family: Arial, Helvetica, sans-serif;
-    min-height: 100vh;
-    padding: 2rem;
-}
-
-div {
+.container {
     max-width: 600px;
     margin: 0 auto;
     background: #ffffff;
     border-radius: 10px;
-    padding: 1.5rem;
+    padding: 1.5rem 0.75rem;
+}
+
+.name-input{
+    margin-top: 60px;
+}
+
+.back-btn{
+    background: rgba(207, 207, 207, 0.5) !important;
 }
 
 input {
@@ -26,7 +21,6 @@ input {
     border: 1px solid #e0e0e0;
     border-radius: 10px;
     font-size: 1rem;
-    font-family: Arial, Helvetica, sans-serif;
     background: #fafafa;
     transition: all 0.2s ease;
 }
@@ -37,7 +31,7 @@ input:focus {
     background: #ffffff;
 }
 
-button {
+.add-btn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -50,11 +44,10 @@ button {
     color: #ffffff;
     font-size: 1rem;
     font-weight: 500;
-    font-family: Arial, Helvetica, sans-serif;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
-button:hover {
+.add-btn:hover {
     background: #1a1a1a;
 }

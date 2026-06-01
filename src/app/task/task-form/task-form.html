@@ -1,0 +1,7 @@
+<div class="container">
+  <button class="back-btn" (click)="back()"><mat-icon>arrow_back</mat-icon></button>
+  <input class="name-input" [(ngModel)]="name" placeholder="Aufgabe" />
+  <input [(ngModel)]="description" placeholder="Beschreibung" />
+
+  <button class="add-btn" (click)="save()">Speichern</button>
+</div>

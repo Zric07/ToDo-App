@@ -1,0 +1,57 @@
+<div>
+    <div class="category-item" [style.backgroundImage]="'url(' + category?.image + ')'">
+        <button class="back-btn" (click)="back()"><mat-icon>arrow_back</mat-icon></button>
+        <div class="category-name">{{category?.name}}</div>
+        <div class="task-count">{{getTaskCount(category?.id ?? 0)}} Aufgaben</div>
+    </div>
+
+    <div class="task-list">
+        <div class="uncompleted-section">
+            @for(task of tasks; track task.id){
+        <div class="todo-item" (touchstart)="onTouchStart(task)" (touchend)="onTouchEnd()">
+            <input type="checkbox" [checked]="task.completed" (change)="toggle(task)">
+            <div class="todo-name">{{task.name}}</div>
+        </div>
+        } @empty {
+        <div class="empty">Keine offenen Aufgaben</div>
+        }
+        </div>
+        
+
+        @if(completedTasks.length > 0){
+        <div class="completed-section">
+            <div class="section-title">Erledigt ({{completedTasks.length}})</div>
+            @for(task of completedTasks; track task.id){
+            <div class="todo-item completed" (touchstart)="onTouchStart(task)" (touchend)="onTouchEnd()">
+                <input type="checkbox" [checked]="task.completed" (change)="toggle(task)">
+                <div class="todo-name">{{task.name}}</div>
+            </div>
+            }
+        </div>
+        }
+    </div>
+</div>
+
+<button class="add" (click)="openForm()">
+    <mat-icon>add</mat-icon>
+</button>
+
+
+
+
+<div class="overlay-menu" [class.show]="showMenu">
+    <div class="overlay-backdrop" (click)="closeMenu()"></div>
+    <div class="overlay-content">
+        <h3>{{selectedTask?.name}}</h3>
+        <div class="overlay-buttons">
+            <button class="edit-btn" (click)="edit()">
+                <mat-icon>edit</mat-icon>
+                Bearbeiten
+            </button>
+            <button class="delete-btn-overlay" (click)="delete()">
+                <mat-icon>delete</mat-icon>
+                Löschen
+            </button>
+        </div>
+    </div>
+</div>
