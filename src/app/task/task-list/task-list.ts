@@ -73,6 +73,11 @@ export class TaskList {
     this.router.navigate(['/taskForm']);
   }
 
+  openTask(id: number){
+    this.taskService.setTaskId(id);
+    this.router.navigate(['taskItem']);
+  }
+
   back() {
     this.router.navigate(['/']);
   }

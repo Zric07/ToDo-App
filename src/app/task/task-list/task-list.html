@@ -21,9 +21,9 @@
         <div class="uncompleted-section">
             <div class="section-title">Offen <span class="section-count">{{tasks.length}}</span></div>
             @for(task of tasks; track task.id){
-            <div class="todo-item" (touchstart)="onTouchStart(task)" (touchend)="onTouchEnd()">
+            <div class="todo-item" (touchstart)="onTouchStart(task)" (touchend)="onTouchEnd()" (click)="openTask(task.id)">
                 <div class="checkbox-wrap">
-                    <input type="checkbox" [checked]="task.completed" (change)="toggle(task)">
+                    <input type="checkbox" [checked]="task.completed" (click)="$event.stopPropagation(); toggle(task)">
                 </div>
                 <div class="todo-name">{{task.name}}</div>
             </div>
@@ -36,9 +36,9 @@
         <div class="completed-section">
             <div class="section-title">Erledigt <span class="section-count">{{completedTasks.length}}</span></div>
             @for(task of completedTasks; track task.id){
-            <div class="todo-item" (touchstart)="onTouchStart(task)" (touchend)="onTouchEnd()">
+            <div class="todo-item" (touchstart)="onTouchStart(task)" (touchend)="onTouchEnd()" (click)="openTask(task.id)">
                 <div class="checkbox-wrap">
-                    <input type="checkbox" [checked]="task.completed" (change)="toggle(task)">
+                    <input type="checkbox" [checked]="task.completed" (click)="$event.stopPropagation(); toggle(task)">
                 </div>
                 <div class="todo-name completed-name">{{task.name}}</div>
             </div>

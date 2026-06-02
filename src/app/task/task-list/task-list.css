@@ -2,12 +2,6 @@
     box-sizing: border-box;
 }
 
-.container {
-    max-width: 600px;
-    background: #f9f9f7;
-    padding-bottom: 80px;
-}
-
 .category-item {
     border-bottom-left-radius: 36px;
     border-bottom-right-radius: 36px;
@@ -29,7 +23,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(160deg, rgba(31,31,31,0.7) 0%, rgba(65,65,65,0.3) 100%);
+    background: linear-gradient(160deg, rgba(31, 31, 31, 0.7) 0%, rgba(65, 65, 65, 0.3) 100%);
     pointer-events: none;
     border-bottom-left-radius: 36px;
     border-bottom-right-radius: 36px;
@@ -46,7 +40,7 @@
     z-index: 0;
 }
 
-.category-item > * {
+.category-item>* {
     position: relative;
     z-index: 1;
 }
@@ -63,7 +57,7 @@
     height: 36px;
     border-radius: 50%;
     border: none;
-    background: rgba(255,255,255,0.12);
+    background: rgba(255, 255, 255, 0.12);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -73,7 +67,7 @@
 }
 
 .back-btn:hover {
-    background: rgba(255,255,255,0.22);
+    background: rgba(255, 255, 255, 0.22);
 }
 
 .back-btn mat-icon {
@@ -91,13 +85,13 @@
 
 .task-count {
     font-size: 14px;
-    color: rgba(255,255,255,0.5);
+    color: rgba(255, 255, 255, 0.5);
     margin-top: 2px;
 }
 
 .progress-bar {
     height: 10px;
-    background: rgba(255,255,255,0.12);
+    background: rgba(255, 255, 255, 0.12);
     border-radius: 99px;
     margin-top: 14px;
     overflow: hidden;
@@ -158,8 +152,7 @@
 }
 
 .todo-item:hover {
-    transform: translateX(4px);
-    background: #fff;
+    background: #f3f3f3;
 }
 
 .todo-item:has(.completed-name) {
@@ -253,7 +246,7 @@ input[type="checkbox"]:focus {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0,0,0,0.3);
+    background: rgba(0, 0, 0, 0.3);
     opacity: 0;
     transition: opacity 0.3s ease;
 }
@@ -317,12 +310,12 @@ input[type="checkbox"]:focus {
 }
 
 .edit-btn {
-    background: #0d0d0d;
-    color: white;
+    background: #0d0d0d !important;
+    color: white !important;
 }
 
 .edit-btn:hover {
-    background: #2a2a2a;
+    background: #2a2a2a !important;
 }
 
 .delete-btn-overlay {
@@ -354,4 +347,4 @@ input[type="checkbox"]:focus {
 
 body.menu-open {
     overflow: hidden;
-} 
+}

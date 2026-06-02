@@ -99,3 +99,161 @@
 .back-btn:hover {
     background: rgba(255,255,255,0.35);
 }
+
+h1{
+    margin-top: 50px;
+    font-size: 40px;
+    font-weight: 800;
+    color: #0d0d0d;
+    line-height: 1;
+    letter-spacing: -3px;
+}
+
+
+.name-input {
+    margin-top: 50px;
+}
+
+input[type="text"],
+input.name-input {
+    width: 100%;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    border: none;
+    border-radius: 18px;
+    font-size: 16px;
+    font-weight: 400;
+    background: #fff;
+    color: #1a1a1a;
+    transition: box-shadow 0.2s ease;
+    box-shadow: 0 0 0 1.5px #e8e8e8;
+    outline: none;
+}
+
+input[type="text"]:hover,
+input.name-input:hover {
+    box-shadow: 0 0 0 1.5px #bbb;
+}
+
+input[type="text"]:focus,
+input.name-input:focus {
+    box-shadow: 0 0 0 1.5px #0d0d0d;
+}
+
+input[type="text"]::placeholder,
+input.name-input::placeholder {
+    color: #ccc;
+    font-weight: 400;
+}
+
+input[type="text"],
+input.description-input {
+    width: 100%;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    border: none;
+    border-radius: 18px;
+    font-size: 16px;
+    font-weight: 400;
+    background: #fff;
+    color: #1a1a1a;
+    transition: box-shadow 0.2s ease;
+    box-shadow: 0 0 0 1.5px #e8e8e8;
+    outline: none;
+}
+
+input[type="text"]:hover,
+input.description-input:hover {
+    box-shadow: 0 0 0 1.5px #bbb;
+}
+
+input[type="text"]:focus,
+input.description-input:focus {
+    box-shadow: 0 0 0 1.5px #0d0d0d;
+}
+
+input[type="text"]::placeholder,
+input.description-input::placeholder {
+    color: #ccc;
+    font-weight: 400;
+}
+
+input[type="file"] {
+    width: 100%;
+    padding: 0;
+    margin-bottom: 12px;
+    border: 2px dashed #e8e8e8;
+    border-radius: 18px;
+    font-size: 14px;
+    background: #fff;
+    color: #bbb;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s ease;
+    padding: 28px 20px;
+    text-align: center;
+} 
+
+input[type="file"]:hover {
+    border-color: #bbb;
+    color: #888;
+}
+
+input[type="file"]:focus {
+    outline: none;
+    border-color: #0d0d0d;
+}
+
+.add-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 18px;
+    background: #0d0d0d;
+    border: none;
+    border-radius: 18px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.18s ease, transform 0.15s ease;
+    margin-top: 8px;
+}
+
+.add-btn:hover {
+    background: #2a2a2a;
+}
+
+.edit-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 18px;
+    background: #0d0d0d;
+    border: none;
+    border-radius: 18px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.18s ease, transform 0.15s ease;
+    margin-top: 8px;
+}
+
+.edit-btn:hover {
+    background: #2a2a2a;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #ffffff;
+    min-height: 100vh;
+    padding: 20px 20px 60px;
+    display: flex;
+    flex-direction: column;
+}

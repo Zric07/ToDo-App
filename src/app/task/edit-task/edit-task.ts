@@ -5,6 +5,7 @@ import { TaskService } from '../../services/task-service';
 import { CategoryService } from '../../services/category-service';
 import { MatIconModule } from '@angular/material/icon';
 import { Task } from '../../../types';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-edit-task',
@@ -21,6 +22,7 @@ export class EditTask {
   taskService = inject(TaskService);
   categoryService = inject(CategoryService);
   router = inject(Router);
+  location = inject(Location);
 
   async ngOnInit() {
     this.task = this.taskService.getTaskById(this.taskService.getTaskId());
@@ -42,6 +44,6 @@ export class EditTask {
   }
 
   back() {
-    this.router.navigate(['/']);
+    this.location.back();
   }
 }
