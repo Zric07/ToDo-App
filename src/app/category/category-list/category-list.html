@@ -8,13 +8,15 @@
 
 <div class="categoryContainer">
     @for(category of categories; track category.id){
-    <div class="category-item" (click)="toggleCategory(category.id)">
+    <div class="category-item"
+         (click)="toggleCategory(category.id)"
+         [style.backgroundImage]="category.image ? 'url(' + category.image + ')' : null">
         <div>
             <div class="category-name">{{category.name}}</div>
             <div class="task-count">{{getTaskCount(category.id)}} Aufgaben</div>
         </div>
-        <button class="delete-btn" (click)="$event.stopPropagation(); delete(category)">
-            <mat-icon>delete</mat-icon>
+        <button class="delete-btn" (click)="$event.stopPropagation(); edit(category)">
+            <mat-icon>edit</mat-icon>
         </button>
     </div>
     }@empty{

@@ -4,27 +4,36 @@ import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../services/task-service';
 import { CategoryService } from '../../services/category-service';
 import { MatIconModule } from '@angular/material/icon';
+import { Task } from '../../../types';
 
 @Component({
-  selector: 'app-task-form',
+  selector: 'app-edit-task',
   imports: [FormsModule, MatIconModule],
-  templateUrl: './task-form.html',
-  styleUrl: './task-form.css',
+  templateUrl: './edit-task.html',
+  styleUrl: './edit-task.css',
 })
-export class TaskForm {
+export class EditTask {
   name = '';
   description = '';
+
   categoryId = 0;
+  task: Task | undefined
   taskService = inject(TaskService);
   categoryService = inject(CategoryService);
   router = inject(Router);
 
-  create() {
+  async ngOnInit() {
+    this.task = this.taskService.getTaskById(this.taskService.getTaskId());
+    this.name = this.task!.name;
+    this.description = this.task!.description;
+  }
+
+  save() {
     if (this.name.trim()) {
-      this.taskService.addTask({
+      this.taskService.editTask(this.taskService.getTaskId(), {
         name: this.name,
-        completed: false,
-        id: 0,
+        completed: this.task!.completed,
+        id: this.taskService.getTaskId(),
         categoryId: this.categoryService.getCategoryId(),
         description: this.description
       });
@@ -35,5 +44,4 @@ export class TaskForm {
   back() {
     this.router.navigate(['/']);
   }
-
 }

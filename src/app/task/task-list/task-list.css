@@ -1,37 +1,184 @@
-
+* {
+    box-sizing: border-box;
+}
 
 .container {
     max-width: 600px;
-    
-    background: #ffffff;
-    border-radius: 10px;
-    
+    background: #f9f9f7;
     padding-bottom: 80px;
+}
+
+.category-item {
+    border-bottom-left-radius: 36px;
+    border-bottom-right-radius: 36px;
+    padding: 18px 18px 24px;
+    position: relative;
+    overflow: hidden;
+    min-height: 210px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #1a1a2e;
+}
+
+.category-item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, rgba(31,31,31,0.7) 0%, rgba(65,65,65,0.3) 100%);
+    pointer-events: none;
+    border-bottom-left-radius: 36px;
+    border-bottom-right-radius: 36px;
+}
+
+.hero-blob {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    top: -60px;
+    right: -60px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.category-item > * {
+    position: relative;
+    z-index: 1;
+}
+
+.category-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.back-btn {
+    align-self: flex-start;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s;
+    padding: 0;
+}
+
+.back-btn:hover {
+    background: rgba(255,255,255,0.22);
+}
+
+.back-btn mat-icon {
+    font-size: 20px;
+    color: #fff;
+}
+
+.category-name {
+    font-size: 30px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+    word-break: break-word;
+}
+
+.task-count {
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 2px;
+}
+
+.progress-bar {
+    height: 10px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 99px;
+    margin-top: 14px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #C9F542;
+    border-radius: 99px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.task-list {
+    margin: 0;
+    padding: 0 14px 100px;
+}
+
+.uncompleted-section {
+    margin-bottom: 0;
+}
+
+.completed-section {
+    margin-top: 6px;
+}
+
+.section-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: #bbb;
+    padding: 20px 2px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section-count {
+    background: #efefef;
+    color: #bbb;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 20px;
+    padding: 2px 8px;
 }
 
 .todo-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    background: none;
-    border-radius: 10px;
-    margin-bottom: 8px;
-    transition: background 0.2s ease;
+    gap: 14px;
+    padding: 15px 16px;
+    border-radius: 18px;
+    margin-bottom: 6px;
+    background: #fff;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease;
+    position: relative;
 }
 
 .todo-item:hover {
-    background: #efefef;
+    transform: translateX(4px);
+    background: #fff;
+}
+
+.todo-item:has(.completed-name) {
+    background: transparent;
+}
+
+.todo-item:has(.completed-name):hover {
+    transform: none;
+    background: transparent;
 }
 
 input[type="checkbox"] {
     appearance: none;
     -webkit-appearance: none;
-    width: 30px;
-    height: 30px;
+    width: 24px;
+    height: 24px;
     margin: 0;
     border-radius: 50%;
-    border: 2px solid #2c2c2c;
+    border: 1.5px solid #ddd;
     background: white;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -39,16 +186,20 @@ input[type="checkbox"] {
     position: relative;
 }
 
+input[type="checkbox"]:hover {
+    border-color: #aaa;
+}
+
 input[type="checkbox"]:checked {
-    background: #e4e4e4;
-    border-color: #e4e4e4;
+    background: #0d0d0d;
+    border-color: #0d0d0d;
 }
 
 input[type="checkbox"]:checked::after {
     content: "✓";
     position: absolute;
-    color: rgb(0, 0, 0);
-    font-size: 18px;
+    color: #fff;
+    font-size: 13px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -58,91 +209,31 @@ input[type="checkbox"]:focus {
     outline: none;
 }
 
-
-
 .todo-name {
     flex: 1;
     color: #1a1a1a;
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 400;
     line-height: 1.4;
     word-break: break-word;
 }
 
-.uncompleted-section{
-    margin-top: 20px;
-    margin-bottom: 20px;
+.completed-name {
+    color: #ccc;
+    text-decoration: line-through;
 }
 
-.add:hover {
-    background: #1a1a1a;
-    transform: scale(1.05);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-}
-
-.add:active {
-    transform: scale(0.98);
-}
-
-.empty{
-    color: #454545;
-    margin-top: 80px;
-    margin-bottom: 80px;
+.empty {
+    color: #ccc;
     text-align: center;
-}
-
-.category-item {
-    display: flex;
-    flex-direction: column;
-    padding: 16px;
-    background: #bdbdbd;
-    border-bottom-left-radius: 30px;
-    border-bottom-right-radius: 30px;
-    margin-bottom: 8px;
-    transition: background 0.2s ease;
-    position: relative;
-    padding-bottom: 40px;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-}
-
-.category-name {
-    color: #1a1a1a;
-    font-size: 20px;
-    font-weight: bold;
-    line-height: 1.4;
-    word-break: break-word;
-    margin-top: 60px;
-}
-
-.task-count {
-    margin-top: 20px;
-    margin-bottom: 0px;
-}
-
-.task-list{
-    margin: 0px 10px 100px 10px;
-}
-
-.section-title{
-    color:#797979;
-}
-
-.completed{
-    margin-top: 20px;
+    padding: 60px 0;
+    font-size: 14px;
 }
 
 
 
 
 
-
-
-
-/* Bestehendes CSS bleibt, nur das hier hinzufügen */
-
-/* Overlay-Menü von unten */
 .overlay-menu {
     position: fixed;
     bottom: 0;
@@ -162,7 +253,7 @@ input[type="checkbox"]:focus {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0,0,0,0.3);
     opacity: 0;
     transition: opacity 0.3s ease;
 }
@@ -173,12 +264,11 @@ input[type="checkbox"]:focus {
 
 .overlay-content {
     position: relative;
-    background: white;
-    border-radius: 20px 20px 0 0;
-    padding: 24px 20px 30px;
+    background: #f9f9f7;
+    border-radius: 28px 28px 0 0;
+    padding: 10px 16px 44px;
     transform: translateY(100%);
-    transition: transform 0.3s ease;
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.38s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 .overlay-menu.show .overlay-content {
@@ -186,18 +276,29 @@ input[type="checkbox"]:focus {
 }
 
 .overlay-content h3 {
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 17px;
+    font-weight: 800;
     color: #1a1a1a;
-    margin-bottom: 20px;
+    margin-bottom: 14px;
     word-break: break-word;
     text-align: center;
+    padding-top: 6px;
+}
+
+.overlay-content::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 4px;
+    background: #ddd;
+    border-radius: 99px;
+    margin: 0 auto 18px;
 }
 
 .overlay-buttons {
     display: flex;
-    gap: 12px;
-    margin-bottom: 16px;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .overlay-buttons button {
@@ -206,50 +307,51 @@ input[type="checkbox"]:focus {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 14px;
+    padding: 16px;
     border: none;
-    border-radius: 12px;
-    font-size: 16px;
+    border-radius: 18px;
+    font-size: 15px;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.18s ease;
 }
 
 .edit-btn {
-    background: #2c2c2c;
+    background: #0d0d0d;
     color: white;
 }
 
 .edit-btn:hover {
-    background: #1a1a1a;
+    background: #2a2a2a;
 }
 
 .delete-btn-overlay {
-    background: #ff4444;
-    color: white;
+    background: #fff0f0;
+    color: #cc0000;
 }
 
 .delete-btn-overlay:hover {
-    background: #cc0000;
+    background: #ffe0e0;
 }
 
 .cancel-btn {
     width: 100%;
-    padding: 14px;
-    background: #f0f0f0;
+    padding: 16px;
+    background: #fff;
     border: none;
-    border-radius: 12px;
-    font-size: 16px;
+    border-radius: 18px;
+    font-size: 15px;
     font-weight: 500;
     cursor: pointer;
-    transition: background 0.2s ease;
+    transition: background 0.18s ease;
+    color: #888;
+    margin-top: 8px;
 }
 
 .cancel-btn:hover {
-    background: #e0e0e0;
+    background: #f0f0ee;
 }
 
-/* Verhindert Hintergrund-Scrollen wenn Menu offen */
 body.menu-open {
     overflow: hidden;
-}
+} 

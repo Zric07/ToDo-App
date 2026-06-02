@@ -22,25 +22,25 @@ export class CategoryList {
 
   async ngOnInit() {
     this.categories = this.categoryService.getCategories();
-    
+
   }
 
-    delete(category: Category) {
-      this.categoryService.deleteCategory(category.id);
-      this.categories = this.categoryService.getCategories();
-      this.router.navigate(['/']);
-    }
-  
-    openForm() {
-      this.router.navigate(['/categoryForm']);
-    }
 
-    toggleCategory(id: number){
-      this.categoryService.toggleCategory(id);
-      this.router.navigate(['/taskList']);
-    }
+  edit(category: Category) {
+    this.categoryService.toggleCategory(category.id);
+    this.router.navigate(['/editCategory']);
+  }
 
-    getTaskCount(categoryId: number): number {
-  return this.taskService.getTasks(categoryId).length;
+  openForm() {
+    this.router.navigate(['/categoryForm']);
+  }
+
+  toggleCategory(id: number) {
+    this.categoryService.toggleCategory(id);
+    this.router.navigate(['/taskList']);
+  }
+
+  getTaskCount(categoryId: number): number {
+    return this.taskService.getTasks(categoryId).length;
+  }
 }
-  }

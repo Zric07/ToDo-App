@@ -52,9 +52,9 @@ export class TaskList {
 
   edit() {
     if (this.selectedTask) {
-      this.router.navigate(['/taskForm', this.selectedTask.id]);
+      this.taskService.setTaskId(this.selectedTask.id);
+      this.router.navigate(['/editTask']);
     }
-    this.closeMenu();
   }
 
   async delete() {

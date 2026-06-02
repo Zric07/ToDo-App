@@ -6,27 +6,41 @@ import { MatIconModule } from '@angular/material/icon';
 import { Category } from '../../../types';
 
 @Component({
-  selector: 'app-category-form',
+  selector: 'app-edit-category',
   imports: [FormsModule, MatIconModule],
-  templateUrl: './category-form.html',
-  styleUrl: './category-form.css',
+  templateUrl: './edit-category.html',
+  styleUrl: './edit-category.css',
 })
-export class CategoryForm {
+export class EditCategory {
   name = '';
   image = '';
   categoryService = inject(CategoryService);
+  category: Category | undefined
+  categories: Category[] = [];
   router = inject(Router);
 
-  create() {
+  async ngOnInit() {
+    this.category = this.categoryService.getCategoryById(this.categoryService.getCategoryId());
+    this.name = this.category!.name;
+    this.image = this.category!.image;
+  }
+
+  save() {
     if (this.name.trim()) {
-      this.categoryService.addCategory({
+      this.categoryService.editCategory(this.categoryService.getCategoryId(), {
         name: this.name,
-        id: 0,
+        id: this.categoryService.getCategoryId(),
         image: this.image
       });
       this.router.navigate(['/']);
     }
   }
+
+    delete() {
+      this.categoryService.deleteCategory(this.categoryService.getCategoryId());
+      this.categories = this.categoryService.getCategories();
+      this.router.navigate(['/']);
+    }
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;

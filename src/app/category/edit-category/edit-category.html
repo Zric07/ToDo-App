@@ -1,9 +1,12 @@
 <div class="container">
-  <h1>Kategorie hinzufügen</h1>
+  <h1>Kategorie bearbeiten</h1>
   <button class="back-btn" (click)="back()"><mat-icon>arrow_back</mat-icon></button>
     <input class="name-input" [(ngModel)]="name" placeholder="Kategorie" />
     <input type="file" (change)="onFileSelected($event)" accept="image/*" />
 
 
-    <button class="add-btn" (click)="create()">Hinzufügen</button>
+    <button class="edit-btn" (click)="save()">Änderungen speichern</button>
+    <button class="delete" (click)="$event.stopPropagation(); delete()">
+      <mat-icon>delete</mat-icon> Kategorie löschen
+    </button>
 </div>

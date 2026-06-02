@@ -42,7 +42,7 @@ h1{
     color: #1a1a1a;
 }
 
-.name-input {
+.name-input{
     margin-top: 50px;
 }
 
@@ -78,33 +78,39 @@ input.name-input::placeholder {
     font-weight: 400;
 }
 
-input[type="file"] {
+input[type="text"],
+input.description-input {
     width: 100%;
-    padding: 0;
+    padding: 18px 20px;
     margin-bottom: 12px;
-    border: 2px dashed #e8e8e8;
+    border: none;
     border-radius: 18px;
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: 400;
     background: #fff;
-    color: #bbb;
-    cursor: pointer;
+    color: #1a1a1a;
+    transition: box-shadow 0.2s ease;
+    box-shadow: 0 0 0 1.5px #e8e8e8;
     outline: none;
-    transition: border-color 0.2s ease;
-    padding: 28px 20px;
-    text-align: center;
-} 
-
-input[type="file"]:hover {
-    border-color: #bbb;
-    color: #888;
 }
 
-input[type="file"]:focus {
-    outline: none;
-    border-color: #0d0d0d;
+input[type="text"]:hover,
+input.description-input:hover {
+    box-shadow: 0 0 0 1.5px #bbb;
 }
 
-.add-btn {
+input[type="text"]:focus,
+input.description-input:focus {
+    box-shadow: 0 0 0 1.5px #0d0d0d;
+}
+
+input[type="text"]::placeholder,
+input.description-input::placeholder {
+    color: #ccc;
+    font-weight: 400;
+}
+
+.edit-btn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -122,6 +128,6 @@ input[type="file"]:focus {
     margin-top: 8px;
 }
 
-.add-btn:hover {
+.edit-btn:hover {
     background: #2a2a2a;
 }
