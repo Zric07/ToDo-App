@@ -28,7 +28,7 @@ export class TaskForm {
         categoryId: this.categoryService.getCategoryId(),
         description: this.description
       });
-      this.router.navigate(['/taskList']);
+      await this.router.navigate(['/taskList']);
     }
   }
 

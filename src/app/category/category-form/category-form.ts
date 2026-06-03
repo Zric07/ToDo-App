@@ -24,7 +24,7 @@ export class CategoryForm {
         id: 0,
         image: this.image
       });
-      this.router.navigate(['/']);
+      await this.router.navigate(['/']);
     }
   }
 

@@ -20,6 +20,11 @@ export class CategoryList {
   constructor(public router: Router) { }
 
   async ngOnInit() {
+    await this.loadData();
+  }
+
+  async loadData() {
+    this.tasks = [];
     this.categories = await this.categoryService.getCategories();
     for (const cat of this.categories) {
       const tasks = await this.taskService.getTasks(cat.id);
@@ -29,16 +34,16 @@ export class CategoryList {
 
   edit(category: Category) {
     this.categoryService.toggleCategory(category.id);
-    this.router.navigate(['/editCategory']);
+    this.router.navigate(['/editCategory']).then(() => this.loadData());
   }
 
   openForm() {
-    this.router.navigate(['/categoryForm']);
+    this.router.navigate(['/categoryForm']).then(() => this.loadData());
   }
 
   toggleCategory(id: number) {
     this.categoryService.toggleCategory(id);
-    this.router.navigate(['/taskList']);
+    this.router.navigate(['/taskList']).then(() => this.loadData());
   }
 
   getTaskCount(categoryId: number): number {
