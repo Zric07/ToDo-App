@@ -17,9 +17,9 @@ export class CategoryForm {
   categoryService = inject(CategoryService);
   router = inject(Router);
 
-  create() {
+  async create() {
     if (this.name.trim()) {
-      this.categoryService.addCategory({
+      await this.categoryService.addCategory({
         name: this.name,
         id: 0,
         image: this.image

@@ -19,9 +19,9 @@ export class TaskForm {
   categoryService = inject(CategoryService);
   router = inject(Router);
 
-  create() {
+  async create() {
     if (this.name.trim()) {
-      this.taskService.addTask({
+      await this.taskService.addTask({
         name: this.name,
         completed: false,
         id: 0,

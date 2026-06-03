@@ -17,7 +17,6 @@ export class CategoryList {
   categories: Category[] = [];
   tasks: Task[] = [];
 
-
   constructor(public router: Router) { }
 
   async ngOnInit() {
@@ -27,7 +26,6 @@ export class CategoryList {
       this.tasks.push(...tasks);
     }
   }
-
 
   edit(category: Category) {
     this.categoryService.toggleCategory(category.id);
