@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { DatabaseService } from './services/database';
 
@@ -9,27 +9,23 @@ import { DatabaseService } from './services/database';
   styleUrl: './app.css'
 })
 export class App {
-
   private db = inject(DatabaseService);
-    ready = false;
-    error: string | null = null;
+  ready = false;
+  error: string | null = null;
 
-     async ngOnInit() {
-    await this.initDatabase();
-  }
-
-  async initDatabase() {
+  async ngOnInit() {
     try {
       await this.db.init();
       this.ready = true;
     } catch (err) {
-      this.error = String(err);
+      this.error = 'Datenbank konnte nicht geladen werden';
+      console.error(err);
     }
   }
 
-  async retryInit() {
+  retryInit() {
     this.error = null;
     this.ready = false;
-    await this.initDatabase();
+    window.location.reload();
   }
 }

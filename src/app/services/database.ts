@@ -2,23 +2,30 @@ import { Injectable } from '@angular/core';
 import { CapacitorSQLite, SQLiteConnection, SQLiteDBConnection } from '@capacitor-community/sqlite';
 import { Category } from '../../types';
 import { Task } from '../../types';
-import { Capacitor } from '@capacitor/core';
 
 @Injectable({ providedIn: 'root' })
 export class DatabaseService {
   private sqlite: SQLiteConnection = new SQLiteConnection(CapacitorSQLite);
   private db!: SQLiteDBConnection;
+  private initialized = false;
 
   async init(): Promise<void> {
-    this.db = await this.sqlite.createConnection(
-      'appdb', 
-      false,
-      'no-encryption',
-      1,
-      false
-    );
-    await this.db.open();
-    await this.createTables();
+    if (this.initialized) return;
+    
+    try {
+      this.db = await this.sqlite.createConnection(
+        'appdb',
+        false,
+        'no-encryption',
+        1,
+        false
+      );
+      await this.db.open();
+      await this.createTables();
+      this.initialized = true;
+    } catch (err) {
+      throw err;
+    }
   }
 
   private async createTables(): Promise<void> {
