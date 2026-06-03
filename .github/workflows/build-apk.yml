@@ -31,11 +31,6 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install Capacitor and SQLite
-        run: |
-          npm install @capacitor/core @capacitor/cli @capacitor/android
-          npm install @capacitor-community/sqlite
-
       - name: Capacitor Sync
         run: npx cap sync android
 
