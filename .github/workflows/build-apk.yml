@@ -17,19 +17,27 @@ jobs:
           node-version: '22'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build Angular
         run: npm run build
 
-      - name: Capacitor Sync
-        run: npx cap sync android
-
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          java-version: '22'
           distribution: 'temurin'
+          java-version: '22'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Capacitor
+        run: |
+          npm install @capacitor/core @capacitor/cli @capacitor/android
+          npm install @capacitor-community/sqlite
+
+      - name: Capacitor Sync
+        run: npx cap sync android
 
       - name: Make gradlew executable
         run: chmod +x android/gradlew

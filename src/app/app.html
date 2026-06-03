@@ -1,3 +1,16 @@
-@if(ready) {
+@if(!ready) {
+    <div class="loading">
+        <div>Lade Datenbank...</div>
+    </div>
+}
+
+@if(error) {
+    <div class="error">
+        <div>Fehler: {{error}}</div>
+        <button (click)="retryInit()">Neu laden</button>
+    </div>
+}
+
+@if(ready && !error) {
     <router-outlet />
 }
