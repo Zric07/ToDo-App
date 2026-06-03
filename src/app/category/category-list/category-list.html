@@ -1,6 +1,3 @@
-@if(isLoading) {
-    <div class="loading">Lade Kategorien...</div>
-} @else {
 <div class="header-row">
     <div class="categoryCount">{{categories.length}} @if(categories.length == 1){
         Kategorie
@@ -26,7 +23,6 @@
     <div class="empty">Keine Kategorien erstellt</div>
     }
 </div>
-}
 
 <button class="add" (click)="openForm()">
     <mat-icon>add</mat-icon>

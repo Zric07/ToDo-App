@@ -6,14 +6,11 @@ import { DatabaseService } from './services/database';
 export const appConfig: ApplicationConfig = {
     providers: [
         provideRouter(routes),
-        {
-            provide: 'DB_INITIALIZED',
-            useFactory: () => inject(DatabaseService).init(),
-            deps: []
-        },
         provideAppInitializer(() => {
             const db = inject(DatabaseService);
-            return db.init();
+            return db.init().catch(err => {
+                return Promise.resolve();
+            });
         })
     ]
 };
