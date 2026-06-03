@@ -11,8 +11,11 @@ export class DatabaseService {
 
   async init(): Promise<void> {
     if (this.initialized) return;
-    
-    try {
+
+    const isConn = await this.sqlite.isConnection('appdb', false);
+    if (isConn.result) {
+      this.db = await this.sqlite.retrieveConnection('appdb', false);
+    } else {
       this.db = await this.sqlite.createConnection(
         'appdb',
         false,
@@ -20,12 +23,11 @@ export class DatabaseService {
         1,
         false
       );
-      await this.db.open();
-      await this.createTables();
-      this.initialized = true;
-    } catch (err) {
-      throw err;
     }
+
+    await this.db.open();
+    await this.createTables();
+    this.initialized = true;
   }
 
   private async createTables(): Promise<void> {
@@ -107,5 +109,5 @@ export class DatabaseService {
   async getAllTasks(): Promise<Task[]> {
     const result = await this.db.query('SELECT * FROM tasks;');
     return (result.values ?? []).map(t => ({ ...t, completed: t.completed === 1 }));
-}
+  }
 }
