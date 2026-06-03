@@ -1,48 +1,48 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Task } from '../../types';
+import { DatabaseService } from './database';
 
 @Injectable({
   providedIn: 'root',
 })
+
 export class TaskService {
-  private tasks: Task[] = [];
-  private nextId = 1;
+  private db = inject(DatabaseService);
   private selectedTaskId = 0;
 
-  getTasks(categoryId: number): Task[] {
-  return this.tasks.filter(t => t.categoryId === categoryId);
-}
-
-  addTask(task: Task): void {
-    task.id = this.nextId++;
-    this.tasks.push(task);
+  getTasks(categoryId: number): Promise<Task[]> {
+    return this.db.getTasks(categoryId);
   }
 
-  editTask(id: number, task: Task): void{
-    const index = this.tasks.findIndex(c => c.id === id);
-    if (index !== -1) {
-      this.tasks[index] = task;
-    }
+  addTask(task: Task): Promise<void> {
+    return this.db.addTask(task.name, task.description, task.categoryId);
   }
 
-  deleteTask(id: number): void {
-    this.tasks = this.tasks.filter(t => t.id !== id);
+  editTask(id: number, task: Task): Promise<void> {
+    return this.db.editTask(id, task.name, task.description);
   }
 
-  toggleTask(id: number): void {
-    const task = this.tasks.find(t => t.id === id);
-    if (task) task.completed = !task.completed;
+  deleteTask(id: number): Promise<void> {
+    return this.db.deleteTask(id);
+  }
+
+  toggleTask(id: number): Promise<void> {
+    return this.db.getAllTasks().then(tasks => {
+      const task = tasks.find(t => t.id === id);
+      if (task) return this.db.toggleTask(id, !task.completed);
+      return;
+    });
   }
 
   setTaskId(id: number): void {
     this.selectedTaskId = id;
   }
 
-  getTaskId(): number{
-      return this.selectedTaskId;
+  getTaskId(): number {
+    return this.selectedTaskId;
   }
 
-  getTaskById(id: number): Task | undefined {
-    return this.tasks.find(c => c.id === id);
+  getTaskById(id: number): Promise<Task | undefined> {
+    return this.db.getAllTasks().then(tasks => tasks.find(t => t.id === id));
   }
 }

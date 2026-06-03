@@ -20,7 +20,7 @@ export class EditCategory {
   router = inject(Router);
 
   async ngOnInit() {
-    this.category = this.categoryService.getCategoryById(this.categoryService.getCategoryId());
+    this.category = await this.categoryService.getCategoryById(this.categoryService.getCategoryId());
     this.name = this.category!.name;
     this.image = this.category!.image;
   }
@@ -36,9 +36,9 @@ export class EditCategory {
     }
   }
 
-  delete() {
+  async delete() {
     this.categoryService.deleteCategory(this.categoryService.getCategoryId());
-    this.categories = this.categoryService.getCategories();
+    this.categories = await this.categoryService.getCategories();
     this.router.navigate(['/']);
   }
 

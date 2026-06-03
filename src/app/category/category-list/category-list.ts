@@ -21,8 +21,11 @@ export class CategoryList {
   constructor(public router: Router) { }
 
   async ngOnInit() {
-    this.categories = this.categoryService.getCategories();
-
+    this.categories = await this.categoryService.getCategories();
+    for (const cat of this.categories) {
+      const tasks = await this.taskService.getTasks(cat.id);
+      this.tasks.push(...tasks);
+    }
   }
 
 
@@ -41,6 +44,6 @@ export class CategoryList {
   }
 
   getTaskCount(categoryId: number): number {
-    return this.taskService.getTasks(categoryId).length;
+    return this.tasks.filter(t => t.categoryId === categoryId).length;
   }
 }

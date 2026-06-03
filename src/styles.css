@@ -8,7 +8,7 @@
     box-sizing: border-box;
 }
 
-.add, .edit {
+.add {
     position: fixed;
     bottom: 1rem;
     right: 1rem;
@@ -26,7 +26,7 @@
     z-index: 1000;
 }
 
-.add mat-icon, .edit mat-icon {
+.add mat-icon{
     font-size: 24px;
     color: white;
     width: 24px;
@@ -36,7 +36,7 @@
     justify-content: center;
 }
 
-.add:hover, .edit:hover {
+.add:hover{
     background: #333;
     transform: scale(1.05);
     box-shadow: 0 6px 24px rgba(0,0,0,0.25);

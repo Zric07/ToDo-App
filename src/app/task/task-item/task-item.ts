@@ -21,9 +21,9 @@ export class TaskItem {
     await this.loadData();
   }
 
-  loadData(){
+  async loadData(){
     const id = this.taskService.getTaskId()
-    this.task = this.taskService.getTaskById(id);
+    this.task = await this.taskService.getTaskById(id);
   }
 
   edit() {

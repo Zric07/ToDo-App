@@ -1,32 +1,28 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Category } from '../../types';
+import { DatabaseService } from './database';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CategoryService {
-  private categories: Category[] = [];
-  private nextId = 1;
+  db = inject(DatabaseService);
   private selectedCategoryId = 0;
 
-  getCategories(): Category[] {
-    return this.categories;
+  getCategories(): Promise<Category[]> {
+    return this.db.getCategories();
   }
 
-  addCategory(category: Category): void {
-    category.id = this.nextId++;
-    this.categories.push(category);
+  addCategory(category: Category): Promise<void> {
+    return this.db.addCategory(category.name, category.image);
   }
 
-  editCategory(id: number, category: Category): void {
-    const index = this.categories.findIndex(c => c.id === id);
-    if (index !== -1) {
-      this.categories[index] = category;
-    }
+  editCategory(id: number, category: Category): Promise<void> {
+    return this.db.editCategory(id, category.name, category.image);
   }
 
-  deleteCategory(id: number): void {
-    this.categories = this.categories.filter(t => t.id !== id);
+  deleteCategory(id: number): Promise<void> {
+    return this.db.deleteCategory(id);
   }
 
   toggleCategory(id: number): void {
@@ -37,7 +33,7 @@ export class CategoryService {
     return this.selectedCategoryId;
   }
 
-  getCategoryById(id: number): Category | undefined {
-    return this.categories.find(c => c.id === id);
+  getCategoryById(id: number): Promise<Category | undefined> {
+    return this.db.getCategories().then(cats => cats.find(c => c.id === id));
   }
 }

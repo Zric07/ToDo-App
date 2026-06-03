@@ -31,7 +31,7 @@ export class TaskList {
 
   async loadData() {
     const id = this.getCategoryById();
-    this.category = this.categoryService.getCategoryById(id);
+    this.category = await this.categoryService.getCategoryById(id);
     await this.refreshTasks();
   }
 
@@ -83,9 +83,9 @@ export class TaskList {
   }
 
   getTaskCount(categoryId: number): number {
-    const tasks = this.taskService.getTasks(categoryId);
-    return tasks ? tasks.length : 0;
-  }
+    return this.tasks.filter(t => t.categoryId === categoryId).length 
+         + this.completedTasks.filter(t => t.categoryId === categoryId).length;
+}
 
   onTouchStart(task: Task) {
     this.pressTimer = setTimeout(() => {

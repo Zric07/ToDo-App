@@ -26,7 +26,7 @@ export class EditTask {
   location = inject(Location);
 
   async ngOnInit() {
-    this.task = this.taskService.getTaskById(this.taskService.getTaskId());
+    this.task = await this.taskService.getTaskById(this.taskService.getTaskId());
     this.name = this.task!.name;
     this.description = this.task!.description;
   }
@@ -44,9 +44,9 @@ export class EditTask {
     }
   }
 
-  delete() {
+  async delete() {
     this.taskService.deleteTask(this.taskService.getTaskId());
-    this.tasks = this.taskService.getTasks(this.categoryId);
+    this.tasks = await this.taskService.getTasks(this.categoryId);
     this.router.navigate(['/taskList']);
   }
 
