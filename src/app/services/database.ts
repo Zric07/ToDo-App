@@ -14,21 +14,25 @@ export class DatabaseService {
 
     const isConn = await this.sqlite.isConnection('appdb', false);
     if (isConn.result) {
-      this.db = await this.sqlite.retrieveConnection('appdb', false);
+        this.db = await this.sqlite.retrieveConnection('appdb', false);
     } else {
-      this.db = await this.sqlite.createConnection(
-        'appdb',
-        false,
-        'no-encryption',
-        1,
-        false
-      );
+        this.db = await this.sqlite.createConnection(
+            'appdb',
+            false,
+            'no-encryption',
+            1,
+            false
+        );
     }
 
-    await this.db.open();
+    const isOpen = await this.db.isDBOpen();
+    if (!isOpen.result) {
+        await this.db.open();
+    }
+
     await this.createTables();
     this.initialized = true;
-  }
+}
 
   private async createTables(): Promise<void> {
     await this.db.execute(`
