@@ -52,17 +52,18 @@ export class TaskList {
 
   edit() {
     if (this.selectedTask) {
-      this.taskService.setTaskId(this.selectedTask.id);
-      this.router.navigate(['/editTask']);
+        this.taskService.setTaskId(this.selectedTask.id);
+        this.closeMenu();
+        this.router.navigate(['/editTask']);
     }
-  }
+}
 
   async delete() {
     if (this.selectedTask) {
       await this.taskService.deleteTask(this.selectedTask.id);
-      await this.refreshTasks();
+       this.closeMenu();
+        await this.refreshTasks();
     }
-    this.closeMenu();
   }
 
   getCategoryById(): number {

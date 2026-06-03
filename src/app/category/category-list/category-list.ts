@@ -34,16 +34,16 @@ export class CategoryList {
 
   edit(category: Category) {
     this.categoryService.toggleCategory(category.id);
-    this.router.navigate(['/editCategory']).then(() => this.loadData());
+    this.router.navigate(['/editCategory']);
   }
 
   openForm() {
-    this.router.navigate(['/categoryForm']).then(() => this.loadData());
+    this.router.navigate(['/categoryForm']);
   }
 
   toggleCategory(id: number) {
     this.categoryService.toggleCategory(id);
-    this.router.navigate(['/taskList']).then(() => this.loadData());
+    this.router.navigate(['/taskList']);
   }
 
   getTaskCount(categoryId: number): number {
