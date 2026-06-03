@@ -54,64 +54,80 @@ export class DatabaseService {
     `);
   }
 
-  async getCategories(): Promise<Category[]> {
+  private async ensureInit(): Promise<void> {
+    if (!this.initialized) {
+        await this.init();
+    }
+}
+
+async getCategories(): Promise<Category[]> {
+    await this.ensureInit();
     const result = await this.db.query('SELECT * FROM categories;');
     return result.values ?? [];
-  }
+}
 
-  async addCategory(name: string, image: string): Promise<void> {
+async addCategory(name: string, image: string): Promise<void> {
+    await this.ensureInit();
     await this.db.run(
-      'INSERT INTO categories (name, image) VALUES (?, ?);',
-      [name, image]
+        'INSERT INTO categories (name, image) VALUES (?, ?);',
+        [name, image]
     );
-  }
+}
 
-  async editCategory(id: number, name: string, image: string): Promise<void> {
+async editCategory(id: number, name: string, image: string): Promise<void> {
+    await this.ensureInit();
     await this.db.run(
-      'UPDATE categories SET name = ?, image = ? WHERE id = ?;',
-      [name, image, id]
+        'UPDATE categories SET name = ?, image = ? WHERE id = ?;',
+        [name, image, id]
     );
-  }
+}
 
-  async deleteCategory(id: number): Promise<void> {
+async deleteCategory(id: number): Promise<void> {
+    await this.ensureInit();
     await this.db.run('DELETE FROM categories WHERE id = ?;', [id]);
-  }
+}
 
-  async getTasks(categoryId: number): Promise<Task[]> {
+async getTasks(categoryId: number): Promise<Task[]> {
+    await this.ensureInit();
     const result = await this.db.query(
-      'SELECT * FROM tasks WHERE categoryId = ?;',
-      [categoryId]
+        'SELECT * FROM tasks WHERE categoryId = ?;',
+        [categoryId]
     );
     return (result.values ?? []).map(t => ({ ...t, completed: t.completed === 1 }));
-  }
+}
 
-  async addTask(name: string, description: string, categoryId: number): Promise<void> {
+async addTask(name: string, description: string, categoryId: number): Promise<void> {
+    await this.ensureInit();
     await this.db.run(
-      'INSERT INTO tasks (name, description, completed, categoryId) VALUES (?, ?, 0, ?);',
-      [name, description, categoryId]
+        'INSERT INTO tasks (name, description, completed, categoryId) VALUES (?, ?, 0, ?);',
+        [name, description, categoryId]
     );
-  }
+}
 
-  async editTask(id: number, name: string, description: string): Promise<void> {
+async editTask(id: number, name: string, description: string): Promise<void> {
+    await this.ensureInit();
     await this.db.run(
-      'UPDATE tasks SET name = ?, description = ? WHERE id = ?;',
-      [name, description, id]
+        'UPDATE tasks SET name = ?, description = ? WHERE id = ?;',
+        [name, description, id]
     );
-  }
+}
 
-  async toggleTask(id: number, completed: boolean): Promise<void> {
+async toggleTask(id: number, completed: boolean): Promise<void> {
+    await this.ensureInit();
     await this.db.run(
-      'UPDATE tasks SET completed = ? WHERE id = ?;',
-      [completed ? 1 : 0, id]
+        'UPDATE tasks SET completed = ? WHERE id = ?;',
+        [completed ? 1 : 0, id]
     );
-  }
+}
 
-  async deleteTask(id: number): Promise<void> {
+async deleteTask(id: number): Promise<void> {
+    await this.ensureInit();
     await this.db.run('DELETE FROM tasks WHERE id = ?;', [id]);
-  }
+}
 
-  async getAllTasks(): Promise<Task[]> {
+async getAllTasks(): Promise<Task[]> {
+    await this.ensureInit();
     const result = await this.db.query('SELECT * FROM tasks;');
     return (result.values ?? []).map(t => ({ ...t, completed: t.completed === 1 }));
-  }
+}
 }
