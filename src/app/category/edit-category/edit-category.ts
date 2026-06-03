@@ -36,22 +36,22 @@ export class EditCategory {
     }
   }
 
-    delete() {
-      this.categoryService.deleteCategory(this.categoryService.getCategoryId());
-      this.categories = this.categoryService.getCategories();
-      this.router.navigate(['/']);
-    }
+  delete() {
+    this.categoryService.deleteCategory(this.categoryService.getCategoryId());
+    this.categories = this.categoryService.getCategories();
+    this.router.navigate(['/']);
+  }
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
       const reader = new FileReader();
-      
+
       reader.onload = () => {
         this.image = reader.result as string;
       };
-      
+
       reader.readAsDataURL(file);
     }
   }

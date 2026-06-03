@@ -15,7 +15,7 @@
             <div class="category-name">{{category.name}}</div>
             <div class="task-count">{{getTaskCount(category.id)}} Aufgaben</div>
         </div>
-        <button class="delete-btn" (click)="$event.stopPropagation(); edit(category)">
+        <button class="edit-btn" (click)="$event.stopPropagation(); edit(category)">
             <mat-icon>edit</mat-icon>
         </button>
     </div>

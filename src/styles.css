@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Stack+Sans+Text:wght@200..700&display=swap');
 
 * {
-  font-family: "Stack Sans Text", sans-serif;
-  font-optical-sizing: auto;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    font-family: "Stack Sans Text", sans-serif;
+    font-optical-sizing: auto;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.add {
+.add, .edit {
     position: fixed;
     bottom: 1rem;
     right: 1rem;
@@ -21,12 +21,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     transition: all 0.2s ease;
     z-index: 1000;
 }
 
-.add mat-icon {
+.add mat-icon, .edit mat-icon {
     font-size: 24px;
     color: white;
     width: 24px;
@@ -36,7 +36,7 @@
     justify-content: center;
 }
 
-.add:hover {
+.add:hover, .edit:hover {
     background: #333;
     transform: scale(1.05);
     box-shadow: 0 6px 24px rgba(0,0,0,0.25);
@@ -49,7 +49,7 @@
     width: 45px;
     height: 45px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255,255,255,0.5);
     border: none;
     cursor: pointer;
     display: flex;
@@ -61,7 +61,7 @@
 
 .delete-btn mat-icon {
     font-size: 24px;
-    color: rgb(0, 0, 0);
+    color: #000;
     width: 24px;
     height: 24px;
     display: flex;
@@ -76,7 +76,7 @@
     width: 40px !important;
     height: 40px !important;
     border-radius: 50% !important;
-    background: #ffffff !important;
+    background: #fff !important;
     border: none !important;
     cursor: pointer !important;
     display: flex !important;
@@ -88,7 +88,7 @@
 
 .back-btn mat-icon {
     font-size: 24px !important;
-    color: rgb(0, 0, 0) !important;
+    color: #000 !important;
     width: 24px !important;
     height: 24px !important;
     display: flex !important;
@@ -97,10 +97,10 @@
 }
 
 .back-btn:hover {
-    background: rgba(255,255,255,0.35);
+    background: rgba(255,255,255,0.35) !important;
 }
 
-h1{
+h1 {
     margin-top: 50px;
     font-size: 40px;
     font-weight: 800;
@@ -109,44 +109,11 @@ h1{
     letter-spacing: -3px;
 }
 
-
-.name-input {
-    margin-top: 50px;
-}
+.name-input { margin-top: 50px; }
+.description { margin-top: 50px; }
 
 input[type="text"],
-input.name-input {
-    width: 100%;
-    padding: 18px 20px;
-    margin-bottom: 12px;
-    border: none;
-    border-radius: 18px;
-    font-size: 16px;
-    font-weight: 400;
-    background: #fff;
-    color: #1a1a1a;
-    transition: box-shadow 0.2s ease;
-    box-shadow: 0 0 0 1.5px #e8e8e8;
-    outline: none;
-}
-
-input[type="text"]:hover,
-input.name-input:hover {
-    box-shadow: 0 0 0 1.5px #bbb;
-}
-
-input[type="text"]:focus,
-input.name-input:focus {
-    box-shadow: 0 0 0 1.5px #0d0d0d;
-}
-
-input[type="text"]::placeholder,
-input.name-input::placeholder {
-    color: #ccc;
-    font-weight: 400;
-}
-
-input[type="text"],
+input.name-input,
 input.description-input {
     width: 100%;
     padding: 18px 20px;
@@ -163,16 +130,19 @@ input.description-input {
 }
 
 input[type="text"]:hover,
+input.name-input:hover,
 input.description-input:hover {
     box-shadow: 0 0 0 1.5px #bbb;
 }
 
 input[type="text"]:focus,
+input.name-input:focus,
 input.description-input:focus {
     box-shadow: 0 0 0 1.5px #0d0d0d;
 }
 
 input[type="text"]::placeholder,
+input.name-input::placeholder,
 input.description-input::placeholder {
     color: #ccc;
     font-weight: 400;
@@ -180,7 +150,7 @@ input.description-input::placeholder {
 
 input[type="file"] {
     width: 100%;
-    padding: 0;
+    padding: 28px 20px;
     margin-bottom: 12px;
     border: 2px dashed #e8e8e8;
     border-radius: 18px;
@@ -190,21 +160,47 @@ input[type="file"] {
     cursor: pointer;
     outline: none;
     transition: border-color 0.2s ease;
-    padding: 28px 20px;
     text-align: center;
-} 
-
-input[type="file"]:hover {
-    border-color: #bbb;
-    color: #888;
 }
 
-input[type="file"]:focus {
-    outline: none;
+input[type="file"]:hover { border-color: #bbb; color: #888; }
+input[type="file"]:focus { outline: none; border-color: #0d0d0d; }
+
+input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
+    margin: 0;
+    border-radius: 50%;
+    border: 1.5px solid #ddd;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    position: relative;
+}
+
+input[type="checkbox"]:hover { border-color: #aaa; }
+
+input[type="checkbox"]:checked {
+    background: #0d0d0d;
     border-color: #0d0d0d;
 }
 
-.add-btn {
+input[type="checkbox"]:checked::after {
+    content: "✓";
+    position: absolute;
+    color: #fff;
+    font-size: 13px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+input[type="checkbox"]:focus { outline: none; }
+
+.add-btn, .edit-btn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -222,21 +218,19 @@ input[type="file"]:focus {
     margin-top: 8px;
 }
 
-.add-btn:hover {
-    background: #2a2a2a;
-}
+.add-btn:hover, .edit-btn:hover { background: #2a2a2a; }
 
-.edit-btn {
+.delete {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
     width: 100%;
     padding: 18px;
-    background: #0d0d0d;
+    background: #fff0f0;
     border: none;
     border-radius: 18px;
-    color: #fff;
+    color: #cc0000;
     font-size: 15px;
     font-weight: 500;
     cursor: pointer;
@@ -244,16 +238,28 @@ input[type="file"]:focus {
     margin-top: 8px;
 }
 
-.edit-btn:hover {
-    background: #2a2a2a;
-}
+.delete:hover { background: #ffe0e0; }
 
 .container {
     max-width: 600px;
     margin: 0 auto;
-    background: #ffffff;
+    background: #fff;
     min-height: 100vh;
     padding: 20px 20px 60px;
     display: flex;
     flex-direction: column;
+}
+
+.task-count {
+    font-size: 13px;
+    color: rgb(247,247,247);
+    margin-top: 5px;
+    font-weight: 400;
+}
+
+.empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #aaa;
+    padding: 80px 0;
 }

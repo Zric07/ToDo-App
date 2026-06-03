@@ -5,4 +5,7 @@
   <input class="description-input" [(ngModel)]="description" placeholder="Beschreibung" />
 
   <button class="edit-btn" (click)="save()">Änderungen speichern</button>
+  <button class="delete" (click)="$event.stopPropagation(); delete()">
+      <mat-icon>delete</mat-icon> Aufgabe löschen
+    </button>
 </div>

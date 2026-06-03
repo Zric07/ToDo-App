@@ -19,6 +19,7 @@ export class EditTask {
 
   categoryId = 0;
   task: Task | undefined
+  tasks: Task[] = []
   taskService = inject(TaskService);
   categoryService = inject(CategoryService);
   router = inject(Router);
@@ -41,6 +42,12 @@ export class EditTask {
       });
       this.router.navigate(['/taskList']);
     }
+  }
+
+  delete() {
+    this.taskService.deleteTask(this.taskService.getTaskId());
+    this.tasks = this.taskService.getTasks(this.categoryId);
+    this.router.navigate(['/taskList']);
   }
 
   back() {
