@@ -2,7 +2,7 @@ package com.example.app;
 
 import android.os.Bundle;
 import com.getcapacitor.BridgeActivity;
-import com.jeep.plugin.capacitor.CapacitorSQLite;
+import com.getcapacitor.community.database.sqlite.CapacitorSQLite;
 
 public class MainActivity extends BridgeActivity {
     @Override
