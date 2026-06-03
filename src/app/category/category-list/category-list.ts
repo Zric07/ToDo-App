@@ -16,11 +16,13 @@ export class CategoryList {
   taskService = inject(TaskService);
   categories: Category[] = [];
   tasks: Task[] = [];
+  isLoading = true;
 
   constructor(public router: Router) { }
 
   async ngOnInit() {
     await this.loadData();
+    this.isLoading = false;
   }
 
   async loadData() {
