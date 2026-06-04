@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Category, Task } from '../../../types';
 import { Router, NavigationEnd } from '@angular/router';
 import { CategoryService } from '../../services/category-service';
@@ -16,14 +16,15 @@ import { DatabaseService } from '../../services/database';
   styleUrl: './category-list.css',
 })
 export class CategoryList implements OnInit {
-  categoryService = inject(CategoryService);
-  taskService = inject(TaskService);
+  private categoryService = inject(CategoryService);
+  private taskService = inject(TaskService);
   private db = inject(DatabaseService);
-  categories: Category[] = [];
-  tasks: Task[] = [];
-  isLoading = true;
+  
+  categories = signal<Category[]>([]);
+  tasks = signal<Task[]>([]);
+  isLoading = signal(true);
 
-  constructor(public router: Router) { }
+  constructor(private router: Router) {}
 
   async ngOnInit() {
     await this.db.init();
@@ -31,32 +32,24 @@ export class CategoryList implements OnInit {
     
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd && event.url === '/')
-    ).subscribe(async () => {
-      await this.loadData();
-    });
+    ).subscribe(() => this.loadData());
   }
 
   async loadData() {
+    this.isLoading.set(true);
     try {
-      this.isLoading = true;
-      this.categories = await this.getCategories();
+      const cats = await this.categoryService.getCategories();
+      this.categories.set(cats);
       
-      this.tasks = [];
-      for (const cat of this.categories) {
-        const tasks = await this.taskService.getTasks(cat.id);
-        this.tasks.push(...tasks);
-      }
-      
+      const taskPromises = cats.map(cat => this.taskService.getTasks(cat.id));
+      const allTasks = await Promise.all(taskPromises);
+      this.tasks.set(allTasks.flat());
     } catch (err) {
+      console.error('[CategoryList] Fehler:', err);
     } finally {
-      this.isLoading = false;
+      this.isLoading.set(false);
     }
   }
-
-  async getCategories() {
-  this.categories = await this.categoryService.getCategories();
-  return this.categories;
-}
 
   edit(category: Category) {
     this.categoryService.toggleCategory(category.id);
@@ -73,6 +66,6 @@ export class CategoryList implements OnInit {
   }
 
   getTaskCount(categoryId: number): number {
-    return this.tasks.filter(t => t.categoryId === categoryId).length;
+    return this.tasks().filter(t => t.categoryId === categoryId).length;
   }
 }

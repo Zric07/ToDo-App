@@ -1,7 +1,7 @@
-import { Component, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Category, Task } from '../../../types';
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { TaskService } from '../../services/task-service';
 import { CategoryService } from '../../services/category-service';
@@ -14,37 +14,40 @@ import { DatabaseService } from '../../services/database';
   templateUrl: './task-list.html',
   styleUrl: './task-list.css',
 })
-export class TaskList {
-  taskService = inject(TaskService);
-  categoryService = inject(CategoryService);
+export class TaskList implements OnInit {
+  private taskService = inject(TaskService);
+  private categoryService = inject(CategoryService);
   private db = inject(DatabaseService);
-  tasks: Task[] = [];
-  completedTasks: Task[] = [];
-  category: Category | undefined;
-  showMenu = false;
-  selectedTask: Task | null = null;
+  private router = inject(Router);
+  
+  tasks = signal<Task[]>([]);
+  completedTasks = signal<Task[]>([]);
+  category = signal<Category | undefined>(undefined);
+  
+  showMenu = signal(false);
+  selectedTask = signal<Task | null>(null);
   private pressTimer: any;
-
-  constructor(public router: Router) { }
 
   async ngOnInit() {
     await this.db.init();
     await this.loadData();
   }
 
+  private getCategoryId(): number {
+    return this.categoryService.getCategoryId();
+  }
+
   async loadData() {
-    const id = this.getCategoryById();
-    this.category = await this.categoryService.getCategoryById(id);
+    const id = this.getCategoryId();
+    this.category.set(await this.categoryService.getCategoryById(id));
     await this.refreshTasks();
   }
 
   async refreshTasks() {
-    const id = this.getCategoryById();
+    const id = this.getCategoryId();
     const allTasks = await this.taskService.getTasks(id);
-
-    this.tasks = [...allTasks.filter(t => t.completed === false)];
-    this.completedTasks = [...allTasks.filter(t => t.completed === true)];
-
+    this.tasks.set(allTasks.filter(t => !t.completed));
+    this.completedTasks.set(allTasks.filter(t => t.completed));
   }
 
   async toggle(task: Task) {
@@ -53,30 +56,26 @@ export class TaskList {
   }
 
   edit() {
-    if (this.selectedTask) {
-        this.taskService.setTaskId(this.selectedTask.id);
-        this.closeMenu();
-        this.router.navigate(['/editTask']);
-    }
-}
-
-  async delete() {
-    if (this.selectedTask) {
-      await this.taskService.deleteTask(this.selectedTask.id);
-       this.closeMenu();
-        await this.refreshTasks();
+    if (this.selectedTask()) {
+      this.taskService.setTaskId(this.selectedTask()!.id);
+      this.closeMenu();
+      this.router.navigate(['/editTask']);
     }
   }
 
-  getCategoryById(): number {
-    return this.categoryService.getCategoryId();
+  async delete() {
+    if (this.selectedTask()) {
+      await this.taskService.deleteTask(this.selectedTask()!.id);
+      this.closeMenu();
+      await this.refreshTasks();
+    }
   }
 
   openForm() {
     this.router.navigate(['/taskForm']);
   }
 
-  openTask(id: number){
+  openTask(id: number) {
     this.taskService.setTaskId(id);
     this.router.navigate(['taskItem']);
   }
@@ -86,14 +85,14 @@ export class TaskList {
   }
 
   getTaskCount(categoryId: number): number {
-    return this.tasks.filter(t => t.categoryId === categoryId).length 
-         + this.completedTasks.filter(t => t.categoryId === categoryId).length;
-}
+    return this.tasks().filter(t => t.categoryId === categoryId).length + 
+           this.completedTasks().filter(t => t.categoryId === categoryId).length;
+  }
 
   onTouchStart(task: Task) {
     this.pressTimer = setTimeout(() => {
-      this.selectedTask = task;
-      this.showMenu = true;
+      this.selectedTask.set(task);
+      this.showMenu.set(true);
       document.body.style.overflow = 'hidden';
     }, 1000);
   }
@@ -106,8 +105,8 @@ export class TaskList {
   }
 
   closeMenu() {
-    this.showMenu = false;
-    this.selectedTask = null;
+    this.showMenu.set(false);
+    this.selectedTask.set(null);
     document.body.style.overflow = '';
   }
 }

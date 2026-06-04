@@ -1,9 +1,9 @@
 <div class="container">
     <button class="back-btn" (click)="back()">
-            <mat-icon>arrow_back</mat-icon>
-        </button>
-    <h1>{{task?.name}}</h1>
-    <div class="description">{{task?.description}}</div>
+        <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>{{task()?.name}}</h1>
+    <div class="description">{{task()?.description || 'Keine Beschreibung'}}</div>
 </div>
 
 <button class="add" (click)="edit()">

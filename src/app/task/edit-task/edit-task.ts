@@ -1,10 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../services/task-service';
 import { CategoryService } from '../../services/category-service';
 import { MatIconModule } from '@angular/material/icon';
-import { Task } from '../../../types';
 import { Location } from '@angular/common';
 import { DatabaseService } from '../../services/database';
 
@@ -16,41 +15,40 @@ import { DatabaseService } from '../../services/database';
   styleUrl: './edit-task.css',
 })
 export class EditTask {
-  name = '';
-  description = '';
-
-  categoryId = 0;
-  task: Task | undefined
-  tasks: Task[] = []
-  taskService = inject(TaskService);
+  private taskService = inject(TaskService);
   private db = inject(DatabaseService);
-  categoryService = inject(CategoryService);
-  router = inject(Router);
-  location = inject(Location);
+  private categoryService = inject(CategoryService);
+  private router = inject(Router);
+  private location = inject(Location);
+  
+  name = signal('');
+  description = signal('');
+  taskId = signal(this.taskService.getTaskId());
 
   async ngOnInit() {
     await this.db.init();
-    this.task = await this.taskService.getTaskById(this.taskService.getTaskId());
-    this.name = this.task!.name;
-    this.description = this.task!.description;
+    const task = await this.taskService.getTaskById(this.taskId());
+    if (task) {
+      this.name.set(task.name);
+      this.description.set(task.description || '');
+    }
   }
 
-  save() {
-    if (this.name.trim()) {
-      this.taskService.editTask(this.taskService.getTaskId(), {
-        name: this.name,
-        completed: this.task!.completed,
-        id: this.taskService.getTaskId(),
+  async save() {
+    if (this.name().trim()) {
+      await this.taskService.editTask(this.taskId(), {
+        name: this.name(),
+        completed: false,
+        id: this.taskId(),
         categoryId: this.categoryService.getCategoryId(),
-        description: this.description
+        description: this.description()
       });
       this.router.navigate(['/taskList']);
     }
   }
 
   async delete() {
-    this.taskService.deleteTask(this.taskService.getTaskId());
-    this.tasks = await this.taskService.getTasks(this.categoryId);
+    await this.taskService.deleteTask(this.taskId());
     this.router.navigate(['/taskList']);
   }
 

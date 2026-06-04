@@ -1,9 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CategoryService } from '../../services/category-service';
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { Category } from '../../../types';
 import { DatabaseService } from '../../services/database';
 
 @Component({
@@ -13,54 +12,49 @@ import { DatabaseService } from '../../services/database';
   styleUrl: './edit-category.css',
 })
 export class EditCategory {
-  name = '';
-  image = '';
-  categoryService = inject(CategoryService);
+  private categoryService = inject(CategoryService);
   private db = inject(DatabaseService);
-  category: Category | undefined
-  categories: Category[] = [];
-  router = inject(Router);
+  private router = inject(Router);
+  
+  name = signal('');
+  image = signal('');
+  categoryId = signal(this.categoryService.getCategoryId());
 
   async ngOnInit() {
     await this.db.init();
-    this.category = await this.categoryService.getCategoryById(this.categoryService.getCategoryId());
-    this.name = this.category!.name;
-    this.image = this.category!.image;
+    const category = await this.categoryService.getCategoryById(this.categoryId());
+    if (category) {
+      this.name.set(category.name);
+      this.image.set(category.image);
+    }
   }
 
-  save() {
-    if (this.name.trim()) {
-      this.categoryService.editCategory(this.categoryService.getCategoryId(), {
-        name: this.name,
-        id: this.categoryService.getCategoryId(),
-        image: this.image
+  async save() {
+    if (this.name().trim()) {
+      await this.categoryService.editCategory(this.categoryId(), {
+        name: this.name(),
+        id: this.categoryId(),
+        image: this.image()
       });
       this.router.navigate(['/']);
     }
   }
 
   async delete() {
-    this.categoryService.deleteCategory(this.categoryService.getCategoryId());
-    this.categories = await this.categoryService.getCategories();
+    await this.categoryService.deleteCategory(this.categoryId());
     this.router.navigate(['/']);
   }
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
-      const file = input.files[0];
       const reader = new FileReader();
-
-      reader.onload = () => {
-        this.image = reader.result as string;
-      };
-
-      reader.readAsDataURL(file);
+      reader.onload = () => this.image.set(reader.result as string);
+      reader.readAsDataURL(input.files[0]);
     }
   }
 
   back() {
     this.router.navigate(['/']);
   }
-
 }
