@@ -7,6 +7,7 @@ import { Task } from '../../../types';
 
 @Component({
   selector: 'app-task-item',
+  standalone: true,
   imports: [CommonModule, MatIconModule],
   templateUrl: './task-item.html',
   styleUrl: './task-item.css',

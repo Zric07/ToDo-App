@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-task-form',
+  standalone: true,
   imports: [FormsModule, MatIconModule],
   templateUrl: './task-form.html',
   styleUrl: './task-form.css',

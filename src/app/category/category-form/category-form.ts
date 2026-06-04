@@ -7,6 +7,7 @@ import { Category } from '../../../types';
 
 @Component({
   selector: 'app-category-form',
+  standalone: true,
   imports: [FormsModule, MatIconModule],
   templateUrl: './category-form.html',
   styleUrl: './category-form.css',
@@ -18,13 +19,19 @@ export class CategoryForm {
   router = inject(Router);
 
   async create() {
-    if (this.name.trim()) {
+    if (!this.name.trim()) {
+      return;
+    }
+
+    try {
       await this.categoryService.addCategory({
         name: this.name,
         id: 0,
         image: this.image
       });
       await this.router.navigate(['/']);
+    } catch (err) {
+      console.error('Kategorie konnte nicht gespeichert werden:', err);
     }
   }
 

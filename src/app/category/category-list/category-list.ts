@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-category-list',
+  standalone: true,
   imports: [MatIconModule, CommonModule],
   templateUrl: './category-list.html',
   styleUrl: './category-list.css',

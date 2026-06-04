@@ -20,8 +20,16 @@ export class DatabaseService {
 
   private async doInit(): Promise<void> {
     try {
-      if (!Capacitor.isNativePlatform()) {
-        throw new Error('SQLite nur auf echten Geräten verfügbar');
+      const platform = Capacitor.getPlatform();
+      const isNative = Capacitor.isNativePlatform();
+      const sqliteAvailable = typeof Capacitor.isPluginAvailable === 'function'
+        ? Capacitor.isPluginAvailable('CapacitorSQLite')
+        : false;
+
+      console.log('[DatabaseService] init', { platform, isNative, sqliteAvailable });
+
+      if (!isNative || !sqliteAvailable) {
+        throw new Error(`SQLite nicht verfügbar: platform=${platform}, native=${isNative}, pluginAvailable=${sqliteAvailable}`);
       }
 
       const isConn = await this.sqlite.isConnection('appdb', false);
@@ -37,9 +45,11 @@ export class DatabaseService {
       }
 
       await this.createTables();
+      console.log('[DatabaseService] createTables complete');
       
       this.initialized = true;
     } catch (err) {
+      console.error('[DatabaseService] init error', err);
       this.initPromise = null;
       throw err;
     }

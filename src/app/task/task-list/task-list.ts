@@ -8,6 +8,7 @@ import { CategoryService } from '../../services/category-service';
 
 @Component({
   selector: 'app-task-list',
+  standalone: true,
   imports: [CommonModule, MatIconModule],
   templateUrl: './task-list.html',
   styleUrl: './task-list.css',
