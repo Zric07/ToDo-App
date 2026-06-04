@@ -1,3 +1,8 @@
+@if(isLoading()) {
+<div class="loading-container">
+    <div class="spinner"></div>
+</div>
+} @else {
 <div class="header-row">
     <div class="categoryCount">{{categories().length}} Kategorien</div>
 </div>
@@ -5,7 +10,7 @@
 <div class="categoryContainer">
     @for(category of categories(); track category.id){
     <div class="category-item" (click)="toggleCategory(category.id)"
-         [style.backgroundImage]="category.image ? 'url(' + category.image + ')' : null">
+        [style.backgroundImage]="category.image ? 'url(' + category.image + ')' : null">
         <div>
             <div class="category-name">{{category.name}}</div>
             <div class="task-count">{{getTaskCount(category.id)}} Aufgaben</div>
@@ -20,5 +25,7 @@
 </div>
 
 <button class="add" (click)="openForm()">
+
     <mat-icon>add</mat-icon>
 </button>
+}

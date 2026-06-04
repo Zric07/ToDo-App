@@ -23,6 +23,7 @@ export class TaskList implements OnInit {
   tasks = signal<Task[]>([]);
   completedTasks = signal<Task[]>([]);
   category = signal<Category | undefined>(undefined);
+  isLoading = signal(true);
   
   showMenu = signal(false);
   selectedTask = signal<Task | null>(null);
@@ -38,9 +39,14 @@ export class TaskList implements OnInit {
   }
 
   async loadData() {
-    const id = this.getCategoryId();
-    this.category.set(await this.categoryService.getCategoryById(id));
-    await this.refreshTasks();
+    this.isLoading.set(true);
+    try {
+      const id = this.getCategoryId();
+      this.category.set(await this.categoryService.getCategoryById(id));
+      await this.refreshTasks();
+    } finally {
+      this.isLoading.set(false);
+    }
   }
 
   async refreshTasks() {

@@ -1,14 +1,20 @@
+@if(isLoading()) {
+<div class="loading-container">
+    <div class="spinner"></div>
+</div>
+} @else {
 <div class="container">
     <h1>Aufgabe bearbeiten</h1>
     <button class="back-btn" (click)="back()">
         <mat-icon>arrow_back</mat-icon>
     </button>
-    
+
     <input class="name-input" [(ngModel)]="name" placeholder="Aufgabe" />
-    <input class="description-input" [(ngModel)]="description" placeholder="Beschreibung"></input>
+    <input class="description-input" [(ngModel)]="description" placeholder="Beschreibung" />
 
     <button class="edit-btn" (click)="save()">Änderungen speichern</button>
     <button class="delete" (click)="delete()">
         <mat-icon>delete</mat-icon> Aufgabe löschen
     </button>
 </div>
+}

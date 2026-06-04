@@ -24,6 +24,7 @@ export class EditTask {
   name = signal('');
   description = signal('');
   taskId = signal(this.taskService.getTaskId());
+  isLoading = signal(true);
 
   async ngOnInit() {
     await this.db.init();
@@ -32,6 +33,7 @@ export class EditTask {
       this.name.set(task.name);
       this.description.set(task.description || '');
     }
+    this.isLoading.set(false);
   }
 
   async save() {
