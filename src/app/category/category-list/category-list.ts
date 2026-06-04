@@ -1,6 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { Category, Task } from '../../../types';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { CategoryService } from '../../services/category-service';
 import { MatIconModule } from '@angular/material/icon';
 import { TaskService } from '../../services/task-service';
@@ -13,24 +13,30 @@ import { CommonModule } from '@angular/common';
   templateUrl: './category-list.html',
   styleUrl: './category-list.css',
 })
-export class CategoryList implements OnInit {
+export class CategoryList implements OnInit, OnDestroy {
   categoryService = inject(CategoryService);
   taskService = inject(TaskService);
   categories: Category[] = [];
   tasks: Task[] = [];
   isLoading = true;
+  private routerSub: any;
 
   constructor(public router: Router) { }
 
   async ngOnInit() {
     await this.loadData();
+    this.routerSub = this.router.events.subscribe((e) => {
+      if (e instanceof NavigationEnd && e.url === '/') {
+        this.loadData();
+      }
+    });
   }
 
   async loadData() {
     try {
       this.isLoading = true;
       this.categories = await this.categoryService.getCategories();
-      console.log('[CategoryList] loaded categories', this.categories);
+      console.log('[CategoryList] loaded categories', JSON.stringify(this.categories));
       this.tasks = [];
       for (const cat of this.categories) {
         const tasks = await this.taskService.getTasks(cat.id);
@@ -40,6 +46,12 @@ export class CategoryList implements OnInit {
       console.error('[CategoryList] loadData error', err);
     } finally {
       this.isLoading = false;
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.routerSub && typeof this.routerSub.unsubscribe === 'function') {
+      this.routerSub.unsubscribe();
     }
   }
 

@@ -20,6 +20,19 @@ export class DatabaseService {
 
   private async doInit(): Promise<void> {
     try {
+      // Prevent using native SQLite when the web app is served by a dev server
+      // (localhost). Running with live-reload can lead to inconsistent plugin
+      // behavior and different DB instances. Fail early with a clear message
+      // so the app is run from the bundled assets (file://) instead.
+      if (typeof window !== 'undefined' && window.location) {
+        const host = window.location.hostname || '';
+        if (host === 'localhost' || host === '127.0.0.1') {
+          const msg = '[DatabaseService] Dev server detected (localhost). Stop the dev server, run `npm run build` and install the APK from Android Studio to use native SQLite.';
+          console.error(msg);
+          this.initPromise = null;
+          throw new Error(msg);
+        }
+      }
       const platform = Capacitor.getPlatform();
       const isNative = Capacitor.isNativePlatform();
       const sqliteAvailable = typeof Capacitor.isPluginAvailable === 'function'
