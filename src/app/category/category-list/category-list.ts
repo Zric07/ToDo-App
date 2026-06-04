@@ -1,10 +1,11 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Category, Task } from '../../../types';
 import { Router, NavigationEnd } from '@angular/router';
 import { CategoryService } from '../../services/category-service';
 import { MatIconModule } from '@angular/material/icon';
 import { TaskService } from '../../services/task-service';
 import { CommonModule } from '@angular/common';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-category-list',
@@ -13,22 +14,22 @@ import { CommonModule } from '@angular/common';
   templateUrl: './category-list.html',
   styleUrl: './category-list.css',
 })
-export class CategoryList implements OnInit, OnDestroy {
+export class CategoryList implements OnInit {
   categoryService = inject(CategoryService);
   taskService = inject(TaskService);
   categories: Category[] = [];
   tasks: Task[] = [];
   isLoading = true;
-  private routerSub: any;
 
   constructor(public router: Router) { }
 
   async ngOnInit() {
     await this.loadData();
-    this.routerSub = this.router.events.subscribe((e) => {
-      if (e instanceof NavigationEnd && e.url === '/') {
-        this.loadData();
-      }
+    
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd && event.url === '/')
+    ).subscribe(() => {
+      this.loadData();
     });
   }
 
@@ -36,22 +37,17 @@ export class CategoryList implements OnInit, OnDestroy {
     try {
       this.isLoading = true;
       this.categories = await this.categoryService.getCategories();
-      console.log('[CategoryList] loaded categories', JSON.stringify(this.categories));
+      console.log('[CategoryList] Geladene Kategorien:', this.categories);
+      
       this.tasks = [];
       for (const cat of this.categories) {
         const tasks = await this.taskService.getTasks(cat.id);
         this.tasks.push(...tasks);
       }
     } catch (err) {
-      console.error('[CategoryList] loadData error', err);
+      console.error('[CategoryList] Fehler:', err);
     } finally {
       this.isLoading = false;
-    }
-  }
-
-  ngOnDestroy() {
-    if (this.routerSub && typeof this.routerSub.unsubscribe === 'function') {
-      this.routerSub.unsubscribe();
     }
   }
 

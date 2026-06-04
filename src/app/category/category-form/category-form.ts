@@ -19,19 +19,15 @@ export class CategoryForm {
   router = inject(Router);
 
   async create() {
-    if (!this.name.trim()) {
-      return;
-    }
-
-    try {
+    if (this.name.trim()) {
       await this.categoryService.addCategory({
         name: this.name,
         id: 0,
         image: this.image
       });
-      await this.router.navigate(['/']);
-    } catch (err) {
-      console.error('Kategorie konnte nicht gespeichert werden:', err instanceof Error ? `${err.name}: ${err.message}` : JSON.stringify(err, Object.getOwnPropertyNames(err), 2));
+      this.router.navigate(['/']).then(() => {
+        window.location.reload();
+      });
     }
   }
 
