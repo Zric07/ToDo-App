@@ -8,51 +8,44 @@ export class DatabaseService {
   private sqlite = new SQLiteConnection(CapacitorSQLite);
   private db: SQLiteDBConnection | null = null;
   private initialized = false;
-  private initPromise: Promise<void> | null = null;
 
   async init(): Promise<void> {
-    if (this.initialized && this.db) return;
-    if (this.initPromise) return this.initPromise;
+    if (this.initialized && this.db !== null) {
+      return;
+    }
 
-    this.initPromise = this.doInit();
-    return this.initPromise;
-  }
-
-  private async doInit(): Promise<void> {
     try {
-      // Prüfe ob Verbindung bereits existiert
-      const isConn = await this.sqlite.isConnection('appdb', false);
+      const dbName = 'appdb';
+      const isConn = await this.sqlite.isConnection(dbName, false);
       
-      if (isConn.result) {
-        // Bestehende Verbindung abrufen
-        this.db = await this.sqlite.retrieveConnection('appdb', false);
-        console.log('[DatabaseService] Existing connection retrieved');
+      if (isConn && isConn.result) {
+        this.db = await this.sqlite.retrieveConnection(dbName, false);
       } else {
-        // Neue Verbindung erstellen
-        this.db = await this.sqlite.createConnection('appdb', false, 'no-encryption', 1, false);
-        console.log('[DatabaseService] New connection created');
+        this.db = await this.sqlite.createConnection(dbName, false, 'no-encryption', 1, false);
       }
 
-      // Prüfe ob Datenbank offen ist
-      if (this.db) {
-        const isOpen = await this.db.isDBOpen();
-        if (!isOpen.result) {
-          await this.db.open();
-          console.log('[DatabaseService] Database opened');
-        }
+      if (this.db === null) {
+        throw new Error('Failed to create or retrieve database connection');
       }
 
-      await this.createTables();
+      const isOpen = await this.db.isDBOpen();
+      if (!isOpen || !isOpen.result) {
+        await this.db.open();
+      }
+
+      await this.ensureTables();
       this.initialized = true;
     } catch (err) {
-      console.error('[DatabaseService] init error', err);
-      this.initPromise = null;
+      this.initialized = false;
+      this.db = null;
       throw err;
     }
   }
 
-  private async createTables(): Promise<void> {
-    if (!this.db) throw new Error('Database not initialized');
+  private async ensureTables(): Promise<void> {
+    if (this.db === null) {
+      throw new Error('Database not initialized');
+    }
     
     await this.db.execute(`
       CREATE TABLE IF NOT EXISTS categories (
@@ -71,69 +64,88 @@ export class DatabaseService {
         FOREIGN KEY (categoryId) REFERENCES categories(id) ON DELETE CASCADE
       );
     `);
-    console.log('[DatabaseService] Tables ready');
   }
 
   async getCategories(): Promise<Category[]> {
     await this.init();
-    if (!this.db) return [];
-    const result = await this.db.query('SELECT * FROM categories;');
+    if (this.db === null) {
+      return [];
+    }
+    const result = await this.db.query('SELECT * FROM categories ORDER BY id DESC;');
     return result.values ?? [];
   }
 
   async addCategory(name: string, image: string): Promise<void> {
     await this.init();
-    if (!this.db) throw new Error('Database not initialized');
+    if (this.db === null) {
+      throw new Error('Database not initialized');
+    }
     await this.db.run('INSERT INTO categories (name, image) VALUES (?, ?);', [name, image]);
   }
 
   async editCategory(id: number, name: string, image: string): Promise<void> {
     await this.init();
-    if (!this.db) throw new Error('Database not initialized');
+    if (this.db === null) {
+      throw new Error('Database not initialized');
+    }
     await this.db.run('UPDATE categories SET name = ?, image = ? WHERE id = ?;', [name, image, id]);
   }
 
   async deleteCategory(id: number): Promise<void> {
     await this.init();
-    if (!this.db) throw new Error('Database not initialized');
+    if (this.db === null) {
+      throw new Error('Database not initialized');
+    }
     await this.db.run('DELETE FROM categories WHERE id = ?;', [id]);
   }
 
   async getTasks(categoryId: number): Promise<Task[]> {
     await this.init();
-    if (!this.db) return [];
-    const result = await this.db.query('SELECT * FROM tasks WHERE categoryId = ?;', [categoryId]);
+    if (this.db === null) {
+      return [];
+    }
+    const result = await this.db.query('SELECT * FROM tasks WHERE categoryId = ? ORDER BY id DESC;', [categoryId]);
     return (result.values ?? []).map(t => ({ ...t, completed: t.completed === 1 }));
   }
 
   async addTask(name: string, description: string, categoryId: number): Promise<void> {
     await this.init();
-    if (!this.db) throw new Error('Database not initialized');
+    if (this.db === null) {
+      throw new Error('Database not initialized');
+    }
     await this.db.run('INSERT INTO tasks (name, description, completed, categoryId) VALUES (?, ?, 0, ?);', [name, description, categoryId]);
   }
 
   async editTask(id: number, name: string, description: string): Promise<void> {
     await this.init();
-    if (!this.db) throw new Error('Database not initialized');
+    if (this.db === null) {
+      throw new Error('Database not initialized');
+    }
     await this.db.run('UPDATE tasks SET name = ?, description = ? WHERE id = ?;', [name, description, id]);
   }
 
   async toggleTask(id: number, completed: boolean): Promise<void> {
     await this.init();
-    if (!this.db) throw new Error('Database not initialized');
+    if (this.db === null) {
+      throw new Error('Database not initialized');
+    }
     await this.db.run('UPDATE tasks SET completed = ? WHERE id = ?;', [completed ? 1 : 0, id]);
   }
 
   async deleteTask(id: number): Promise<void> {
     await this.init();
-    if (!this.db) throw new Error('Database not initialized');
+    if (this.db === null) {
+      throw new Error('Database not initialized');
+    }
     await this.db.run('DELETE FROM tasks WHERE id = ?;', [id]);
   }
 
   async getAllTasks(): Promise<Task[]> {
     await this.init();
-    if (!this.db) return [];
-    const result = await this.db.query('SELECT * FROM tasks;');
+    if (this.db === null) {
+      return [];
+    }
+    const result = await this.db.query('SELECT * FROM tasks ORDER BY id DESC;');
     return (result.values ?? []).map(t => ({ ...t, completed: t.completed === 1 }));
   }
 }

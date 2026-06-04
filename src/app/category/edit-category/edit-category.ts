@@ -7,7 +7,6 @@ import { Category } from '../../../types';
 
 @Component({
   selector: 'app-edit-category',
-  standalone: true,
   imports: [FormsModule, MatIconModule],
   templateUrl: './edit-category.html',
   styleUrl: './edit-category.css',

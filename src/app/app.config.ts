@@ -4,15 +4,11 @@ import { routes } from './app.routes';
 import { DatabaseService } from './services/database';
 
 export const appConfig: ApplicationConfig = {
-    providers: [
-        provideRouter(routes),
-        provideAppInitializer(() => {
-            const db = inject(DatabaseService);
-            return db.init().catch(err => {
-                console.error('Datenbankinitialisierung fehlgeschlagen:', err);
-                // App trotzdem starten lassen
-                return Promise.resolve();
-            });
-        })
-    ]
+  providers: [
+    provideRouter(routes),
+    provideAppInitializer(() => {
+      const db = inject(DatabaseService);
+      return db.init();
+    })
+  ]
 };
