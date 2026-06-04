@@ -27,14 +27,20 @@ export class CategoryList implements OnInit {
   }
 
   async loadData() {
-    this.isLoading = true;
-    this.categories = await this.categoryService.getCategories();
-    this.tasks = [];
-    for (const cat of this.categories) {
-      const tasks = await this.taskService.getTasks(cat.id);
-      this.tasks.push(...tasks);
+    try {
+      this.isLoading = true;
+      this.categories = await this.categoryService.getCategories();
+      console.log('[CategoryList] loaded categories', this.categories);
+      this.tasks = [];
+      for (const cat of this.categories) {
+        const tasks = await this.taskService.getTasks(cat.id);
+        this.tasks.push(...tasks);
+      }
+    } catch (err) {
+      console.error('[CategoryList] loadData error', err);
+    } finally {
+      this.isLoading = false;
     }
-    this.isLoading = false;
   }
 
   edit(category: Category) {

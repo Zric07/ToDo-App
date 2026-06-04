@@ -49,9 +49,20 @@ export class DatabaseService {
       
       this.initialized = true;
     } catch (err) {
-      console.error('[DatabaseService] init error', err);
+      console.error('[DatabaseService] init error', this.formatError(err));
       this.initPromise = null;
       throw err;
+    }
+  }
+
+  private formatError(err: unknown): string {
+    if (err instanceof Error) {
+      return `${err.name}: ${err.message}\n${err.stack ?? ''}`;
+    }
+    try {
+      return JSON.stringify(err, Object.getOwnPropertyNames(err), 2);
+    } catch {
+      return String(err);
     }
   }
 

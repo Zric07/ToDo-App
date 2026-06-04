@@ -31,7 +31,7 @@ export class CategoryForm {
       });
       await this.router.navigate(['/']);
     } catch (err) {
-      console.error('Kategorie konnte nicht gespeichert werden:', err);
+      console.error('Kategorie konnte nicht gespeichert werden:', err instanceof Error ? `${err.name}: ${err.message}` : JSON.stringify(err, Object.getOwnPropertyNames(err), 2));
     }
   }
 
