@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { TaskService } from '../../services/task-service';
 import { Task } from '../../../types';
+import { DatabaseService } from '../../services/database';
 
 @Component({
   selector: 'app-task-item',
@@ -14,11 +15,13 @@ import { Task } from '../../../types';
 })
 export class TaskItem {
   taskService = inject(TaskService);
+  private db = inject(DatabaseService);
   task: Task | undefined;
 
   constructor(public router: Router) { }
 
     async ngOnInit() {
+    await this.db.init();
     await this.loadData();
   }
 

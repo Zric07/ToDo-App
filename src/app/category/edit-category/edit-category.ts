@@ -4,6 +4,7 @@ import { CategoryService } from '../../services/category-service';
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { Category } from '../../../types';
+import { DatabaseService } from '../../services/database';
 
 @Component({
   selector: 'app-edit-category',
@@ -15,11 +16,13 @@ export class EditCategory {
   name = '';
   image = '';
   categoryService = inject(CategoryService);
+  private db = inject(DatabaseService);
   category: Category | undefined
   categories: Category[] = [];
   router = inject(Router);
 
   async ngOnInit() {
+    await this.db.init();
     this.category = await this.categoryService.getCategoryById(this.categoryService.getCategoryId());
     this.name = this.category!.name;
     this.image = this.category!.image;

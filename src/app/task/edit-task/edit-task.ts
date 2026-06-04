@@ -6,6 +6,7 @@ import { CategoryService } from '../../services/category-service';
 import { MatIconModule } from '@angular/material/icon';
 import { Task } from '../../../types';
 import { Location } from '@angular/common';
+import { DatabaseService } from '../../services/database';
 
 @Component({
   selector: 'app-edit-task',
@@ -22,11 +23,13 @@ export class EditTask {
   task: Task | undefined
   tasks: Task[] = []
   taskService = inject(TaskService);
+  private db = inject(DatabaseService);
   categoryService = inject(CategoryService);
   router = inject(Router);
   location = inject(Location);
 
   async ngOnInit() {
+    await this.db.init();
     this.task = await this.taskService.getTaskById(this.taskService.getTaskId());
     this.name = this.task!.name;
     this.description = this.task!.description;

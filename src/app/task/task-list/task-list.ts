@@ -5,6 +5,7 @@ import { CommonModule, Location } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { TaskService } from '../../services/task-service';
 import { CategoryService } from '../../services/category-service';
+import { DatabaseService } from '../../services/database';
 
 @Component({
   selector: 'app-task-list',
@@ -16,7 +17,7 @@ import { CategoryService } from '../../services/category-service';
 export class TaskList {
   taskService = inject(TaskService);
   categoryService = inject(CategoryService);
-  private cdr = inject(ChangeDetectorRef);
+  private db = inject(DatabaseService);
   tasks: Task[] = [];
   completedTasks: Task[] = [];
   category: Category | undefined;
@@ -27,6 +28,7 @@ export class TaskList {
   constructor(public router: Router) { }
 
   async ngOnInit() {
+    await this.db.init();
     await this.loadData();
   }
 
@@ -43,7 +45,6 @@ export class TaskList {
     this.tasks = [...allTasks.filter(t => t.completed === false)];
     this.completedTasks = [...allTasks.filter(t => t.completed === true)];
 
-    this.cdr.detectChanges();
   }
 
   async toggle(task: Task) {

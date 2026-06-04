@@ -19,7 +19,6 @@ export class CategoryList implements OnInit {
   categoryService = inject(CategoryService);
   taskService = inject(TaskService);
   private db = inject(DatabaseService);
-  private cdr = inject(ChangeDetectorRef);
   categories: Category[] = [];
   tasks: Task[] = [];
   isLoading = true;
@@ -41,7 +40,6 @@ export class CategoryList implements OnInit {
     try {
       this.isLoading = true;
       this.categories = await this.getCategories();
-      console.log('[CategoryList] Geladene Kategorien:', JSON.stringify(this.categories));
       
       this.tasks = [];
       for (const cat of this.categories) {
@@ -49,18 +47,14 @@ export class CategoryList implements OnInit {
         this.tasks.push(...tasks);
       }
       
-      this.cdr.detectChanges();
     } catch (err) {
-      console.error('[CategoryList] Fehler:', err);
     } finally {
       this.isLoading = false;
-      this.cdr.detectChanges();
     }
   }
 
   async getCategories() {
   this.categories = await this.categoryService.getCategories();
-  this.cdr.detectChanges();
   return this.categories;
 }
 
