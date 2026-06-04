@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { TaskService } from '../../services/task-service';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs/operators';
+import { DatabaseService } from '../../services/database';
 
 @Component({
   selector: 'app-category-list',
@@ -17,6 +18,7 @@ import { filter } from 'rxjs/operators';
 export class CategoryList implements OnInit {
   categoryService = inject(CategoryService);
   taskService = inject(TaskService);
+  private db = inject(DatabaseService);
   categories: Category[] = [];
   tasks: Task[] = [];
   isLoading = true;
@@ -24,12 +26,13 @@ export class CategoryList implements OnInit {
   constructor(public router: Router) { }
 
   async ngOnInit() {
+    await this.db.init();
     await this.loadData();
     
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd && event.url === '/')
-    ).subscribe(() => {
-      this.loadData();
+    ).subscribe(async () => {
+      await this.loadData();
     });
   }
 
@@ -37,7 +40,7 @@ export class CategoryList implements OnInit {
     try {
       this.isLoading = true;
       this.categories = await this.categoryService.getCategories();
-      console.log('[CategoryList] Geladene Kategorien:', this.categories);
+      console.log('[CategoryList] Geladene Kategorien:', JSON.stringify(this.categories));
       
       this.tasks = [];
       for (const cat of this.categories) {

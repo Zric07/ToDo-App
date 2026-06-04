@@ -17,14 +17,11 @@ export class DatabaseService {
     try {
       const dbName = 'appdb';
       
-      // Versuche zuerst, eine bestehende Verbindung zu schließen
       try {
         await this.sqlite.closeConnection(dbName, false);
       } catch (closeError) {
-        // Ignoriere Fehler beim Schließen
       }
       
-      // Jetzt erstelle eine neue Verbindung
       this.db = await this.sqlite.createConnection(dbName, false, 'no-encryption', 1, false);
 
       if (this.db === null) {
