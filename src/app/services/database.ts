@@ -16,16 +16,19 @@ export class DatabaseService {
 
     try {
       const dbName = 'appdb';
-      const isConn = await this.sqlite.isConnection(dbName, false);
       
-      if (isConn && isConn.result) {
-        this.db = await this.sqlite.retrieveConnection(dbName, false);
-      } else {
-        this.db = await this.sqlite.createConnection(dbName, false, 'no-encryption', 1, false);
+      // Versuche zuerst, eine bestehende Verbindung zu schließen
+      try {
+        await this.sqlite.closeConnection(dbName, false);
+      } catch (closeError) {
+        // Ignoriere Fehler beim Schließen
       }
+      
+      // Jetzt erstelle eine neue Verbindung
+      this.db = await this.sqlite.createConnection(dbName, false, 'no-encryption', 1, false);
 
       if (this.db === null) {
-        throw new Error('Failed to create or retrieve database connection');
+        throw new Error('Failed to create database connection');
       }
 
       const isOpen = await this.db.isDBOpen();
