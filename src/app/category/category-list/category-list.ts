@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Category, Task } from '../../../types';
 import { Router, NavigationEnd } from '@angular/router';
 import { CategoryService } from '../../services/category-service';
@@ -19,6 +19,7 @@ export class CategoryList implements OnInit {
   categoryService = inject(CategoryService);
   taskService = inject(TaskService);
   private db = inject(DatabaseService);
+  private cdr = inject(ChangeDetectorRef);
   categories: Category[] = [];
   tasks: Task[] = [];
   isLoading = true;
@@ -39,7 +40,7 @@ export class CategoryList implements OnInit {
   async loadData() {
     try {
       this.isLoading = true;
-      this.categories = await this.categoryService.getCategories();
+      this.categories = await this.getCategories();
       console.log('[CategoryList] Geladene Kategorien:', JSON.stringify(this.categories));
       
       this.tasks = [];
@@ -47,12 +48,21 @@ export class CategoryList implements OnInit {
         const tasks = await this.taskService.getTasks(cat.id);
         this.tasks.push(...tasks);
       }
+      
+      this.cdr.detectChanges();
     } catch (err) {
       console.error('[CategoryList] Fehler:', err);
     } finally {
       this.isLoading = false;
+      this.cdr.detectChanges();
     }
   }
+
+  async getCategories() {
+  this.categories = await this.categoryService.getCategories();
+  this.cdr.detectChanges();
+  return this.categories;
+}
 
   edit(category: Category) {
     this.categoryService.toggleCategory(category.id);
