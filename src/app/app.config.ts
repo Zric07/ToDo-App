@@ -10,6 +10,7 @@ export const appConfig: ApplicationConfig = {
             const db = inject(DatabaseService);
             return db.init().catch(err => {
                 console.error('Datenbankinitialisierung fehlgeschlagen:', err);
+                // App trotzdem starten lassen
                 return Promise.resolve();
             });
         })
