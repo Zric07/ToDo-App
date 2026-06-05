@@ -24,6 +24,10 @@
     pointer-events: none;
 }
 
+.category-item.daily-header::after {
+    background: linear-gradient(to top, rgba(0,0,139,0.45) 0%, rgba(70,130,200,0.05) 80%);
+}
+
 .hero-blob {
     position: absolute;
     width: 280px;
