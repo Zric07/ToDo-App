@@ -83,4 +83,8 @@
     bottom: 0px;
 }
 
+.task-count {
+    margin-top: 2px !important;
+}
+
 .category-bottom { display: flex; flex-direction: column; gap: 6px; }
