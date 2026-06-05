@@ -96,19 +96,21 @@ export class TaskList implements OnInit {
   }
 
   onTouchStart(task: Task) {
+    if (this.pressTimer) return;
     this.pressTimer = setTimeout(() => {
-      this.selectedTask.set(task);
-      this.showMenu.set(true);
-      document.body.style.overflow = 'hidden';
+        this.selectedTask.set(task);
+        this.showMenu.set(true);
+        document.body.style.overflow = 'hidden';
+        this.pressTimer = null;
     }, 1000);
-  }
+}
 
-  onTouchEnd() {
+onTouchEnd() {
     if (this.pressTimer) {
-      clearTimeout(this.pressTimer);
-      this.pressTimer = null;
+        clearTimeout(this.pressTimer);
+        this.pressTimer = null;
     }
-  }
+}
 
   closeMenu() {
     this.showMenu.set(false);

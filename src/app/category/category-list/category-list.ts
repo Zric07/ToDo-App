@@ -19,6 +19,10 @@ export class CategoryList implements OnInit {
   private categoryService = inject(CategoryService);
   private taskService = inject(TaskService);
   private db = inject(DatabaseService);
+
+  showMenu = signal(false);
+  selectedCategory = signal<Category | null>(null);
+  private pressTimer: any;
   
   categories = signal<Category[]>([]);
   tasks = signal<Task[]>([]);
@@ -51,10 +55,19 @@ export class CategoryList implements OnInit {
     }
   }
 
-  edit(category: Category) {
+  edit(category: Category | null) {
+    if (!category) return;
     this.categoryService.toggleCategory(category.id);
+    this.closeMenu();
     this.router.navigate(['/editCategory']);
-  }
+}
+
+  async delete(categoryId: number | undefined) {
+    if (!categoryId) return;
+    await this.categoryService.deleteCategory(categoryId);
+    this.closeMenu();
+    await this.loadData();
+}
 
   openForm() {
     this.router.navigate(['/categoryForm']);
@@ -67,5 +80,28 @@ export class CategoryList implements OnInit {
 
   getTaskCount(categoryId: number): number {
     return this.tasks().filter(t => t.categoryId === categoryId).length;
+  }
+
+    onTouchStart(category: Category) {
+    if (this.pressTimer) return;
+    this.pressTimer = setTimeout(() => {
+        this.selectedCategory.set(category);
+        this.showMenu.set(true);
+        document.body.style.overflow = 'hidden';
+        this.pressTimer = null;
+    }, 1000);
+}
+
+onTouchEnd() {
+    if (this.pressTimer) {
+        clearTimeout(this.pressTimer);
+        this.pressTimer = null;
+    }
+}
+
+closeMenu() {
+    this.showMenu.set(false);
+    this.selectedCategory.set(null);
+    document.body.style.overflow = '';
   }
 }

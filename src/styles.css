@@ -1,4 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Stack+Sans+Text:wght@200..700&display=swap');
+@font-face {
+    font-family: 'Stack Sans Text';
+    src: url('/assets/fonts/stack-sans-text/StackSansText-VariableFont_wght.ttf') format('truetype');
+    font-weight: 100 700;
+    font-style: normal;
+}
 
 * {
     font-family: "Stack Sans Text", sans-serif;
