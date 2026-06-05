@@ -38,12 +38,15 @@ export class EditTask {
 
   async save() {
     if (this.name().trim()) {
+      const isDailyCategory = this.categoryService.getCategoryId() === 1;
+      
       await this.taskService.editTask(this.taskId(), {
         name: this.name(),
         completed: false,
         id: this.taskId(),
         categoryId: this.categoryService.getCategoryId(),
-        description: this.description()
+        description: this.description(),
+        daily: isDailyCategory  
       });
       this.router.navigate(['/taskList']);
     }
