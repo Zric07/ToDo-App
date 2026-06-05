@@ -4,7 +4,7 @@
 </div>
 } @else {
 <div>
-    <div class="category-item" [class.daily-header]="category()?.id === 1" [style.backgroundImage]="'url(' + (category()?.image || '') + ')'">
+    <div class="category-item" [class.daily-header]="category()?.name === 'Tägliche Aufgaben' && category()?.id === 1" [style.backgroundImage]="'url(' + (category()?.image || '') + ')'">
         <div class="hero-blob"></div>
         <button class="back-btn" (click)="back()">
             <mat-icon>arrow_back</mat-icon>
