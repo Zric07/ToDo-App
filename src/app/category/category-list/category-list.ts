@@ -89,7 +89,7 @@ export class CategoryList implements OnInit {
         this.showMenu.set(true);
         document.body.style.overflow = 'hidden';
         this.pressTimer = null;
-    }, 1000);
+    }, 750);
 }
 
 onTouchEnd() {

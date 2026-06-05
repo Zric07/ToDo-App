@@ -12,7 +12,8 @@
     <div class="category-item" (click)="toggleCategory(category.id)"
         [style.backgroundImage]="category.image ? 'url(' + category.image + ')' : null" 
         (touchstart)="onTouchStart(category)" (touchend)="onTouchEnd()">
-        <div>
+        <div></div>
+        <div class="category-bottom">
             <div class="category-name">{{category.name}}</div>
             <div class="task-count">{{getTaskCount(category.id)}} Aufgaben</div>
         </div>

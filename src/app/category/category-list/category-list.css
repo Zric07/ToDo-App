@@ -80,5 +80,7 @@
     color: #fff;
     line-height: 1.15;
     word-break: break-word;
-    margin-top: 8px;
+    bottom: 0px;
 }
+
+.category-bottom { display: flex; flex-direction: column; gap: 6px; }
