@@ -60,31 +60,17 @@
     background-color: #e0e0e0;
 }
 
-#daily {
-    border-radius: 22px;
-    padding: clamp(14px, 3vw, 20px) clamp(14px, 3vw, 18px);
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-    min-height: 180px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: transform 0.18s ease;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-color: #e0e0e0;
-}
-
-#daily::after {
+.category-item::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0,0,139,0.45) 0%, rgba(70,130,200,0.05) 100%);
+    background: linear-gradient(to top, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.05) 60%);
     border-radius: 22px;
     pointer-events: none;
+}
+
+.category-item.daily-header::after {
+    background: linear-gradient(to top, rgba(0,0,139,0.45) 0%, rgba(70,130,200,0.05) 100%);
 }
 
 .category-item::after {
