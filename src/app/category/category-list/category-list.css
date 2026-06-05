@@ -78,7 +78,6 @@
     font-size: clamp(16px, 3vw, 20px);
     font-weight: 800;
     color: #fff;
-    line-height: 1.15;
     word-break: break-word;
     bottom: 0px;
 }

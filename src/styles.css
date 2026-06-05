@@ -367,3 +367,38 @@ input[type="checkbox"]:focus { outline: none; }
 .delete-btn-overlay:hover { background: #ffe0e0; }
 
 body.menu-open { overflow: hidden; }
+
+
+
+
+
+
+textarea.description-input {
+    width: 100%;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    border: none;
+    border-radius: 18px;
+    font-size: 16px;
+    font-weight: 400;
+    background: #fff;
+    color: #1a1a1a;
+    transition: box-shadow 0.2s ease;
+    box-shadow: 0 0 0 1.5px #e8e8e8;
+    outline: none;
+    resize: none;
+    min-height: 80px;
+}
+
+textarea.description-input:hover {
+    box-shadow: 0 0 0 1.5px #bbb;
+}
+
+textarea.description-input:focus {
+    box-shadow: 0 0 0 1.5px #0d0d0d;
+}
+
+textarea.description-input::placeholder {
+    color: #ccc;
+    font-weight: 400;
+}
