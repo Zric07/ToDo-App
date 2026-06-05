@@ -4,7 +4,7 @@
 </div>
 } @else {
 <div class="header-row">
-    <div class="categoryCount">{{categories().length}} Kategorien</div>
+    <div class="categoryCount">{{categories().length}} @if(categories().length === 1) { Kategorie } @else { Kategorien }</div>
 </div>
 
 <div class="categoryContainer">

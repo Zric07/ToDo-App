@@ -61,7 +61,8 @@ export class CategoryList implements OnInit {
     this.isLoading.set(true);
     try {
         const cats = await this.categoryService.getCategories();
-        this.categories.set(cats);
+        const sortedCats = cats.sort((a, b) => a.id - b.id);
+        this.categories.set(sortedCats);
         
         const taskPromises = cats.map(cat => this.taskService.getTasks(cat.id));
         const allTasks = await Promise.all(taskPromises);
