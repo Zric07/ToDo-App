@@ -22,12 +22,14 @@ export class TaskForm {
 
   async create() {
     if (this.name.trim()) {
+      const categoryId = this.categoryService.getCategoryId();
       await this.taskService.addTask({
         name: this.name,
         completed: false,
         id: 0,
-        categoryId: this.categoryService.getCategoryId(),
-        description: this.description
+        categoryId: categoryId,
+        description: this.description,
+        daily: categoryId === 1
       });
       await this.router.navigate(['/taskList']);
     }

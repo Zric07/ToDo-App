@@ -23,6 +23,7 @@ export class CategoryList implements OnInit {
   showMenu = signal(false);
   selectedCategory = signal<Category | null>(null);
   private pressTimer: any;
+  defaultCategory = signal<Category | null>(null);
   
   categories = signal<Category[]>([]);
   tasks = signal<Task[]>([]);
@@ -32,6 +33,7 @@ export class CategoryList implements OnInit {
 
   async ngOnInit() {
     await this.db.init();
+    await this.ensureDefaultCategory();
     await this.loadData();
     
     this.router.events.pipe(
@@ -39,21 +41,37 @@ export class CategoryList implements OnInit {
     ).subscribe(() => this.loadData());
   }
 
+  private async ensureDefaultCategory() {
+    const cats = await this.categoryService.getCategories();
+    const existing = cats.find(c => c.id === 1);
+    if (!existing) {
+        await this.categoryService.addCategory({
+            id: 1,
+            name: 'Tägliche Aufgaben',
+            image: ''
+        });
+        const updated = await this.categoryService.getCategories();
+        this.defaultCategory.set(updated.find(c => c.id === 1) ?? null);
+    } else {
+        this.defaultCategory.set(existing);
+    }
+}
+
   async loadData() {
     this.isLoading.set(true);
     try {
-      const cats = await this.categoryService.getCategories();
-      this.categories.set(cats);
-      
-      const taskPromises = cats.map(cat => this.taskService.getTasks(cat.id));
-      const allTasks = await Promise.all(taskPromises);
-      this.tasks.set(allTasks.flat());
+        const cats = await this.categoryService.getCategories();
+        this.categories.set(cats.filter(c => c.id !== 1));
+        
+        const taskPromises = cats.map(cat => this.taskService.getTasks(cat.id));
+        const allTasks = await Promise.all(taskPromises);
+        this.tasks.set(allTasks.flat());
     } catch (err) {
-      console.error('[CategoryList] Fehler:', err);
+        console.error('[CategoryList] Fehler:', err);
     } finally {
-      this.isLoading.set(false);
+        this.isLoading.set(false);
     }
-  }
+}
 
   edit(category: Category | null) {
     if (!category) return;

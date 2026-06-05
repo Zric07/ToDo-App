@@ -15,8 +15,8 @@ export class TaskService {
   }
 
   addTask(task: Task): Promise<void> {
-    return this.db.addTask(task.name, task.description, task.categoryId);
-  }
+    return this.db.addTask(task.name, task.description, task.categoryId, task.daily);
+}
 
   editTask(id: number, task: Task): Promise<void> {
     return this.db.editTask(id, task.name, task.description);

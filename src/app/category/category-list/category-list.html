@@ -8,6 +8,15 @@
 </div>
 
 <div class="categoryContainer">
+    <div class="category-item" id="daily" (click)="toggleCategory(1)">
+        <div></div>
+        <div class="category-bottom">
+            <div class="category-name">Tägliche Aufgaben</div>
+            <div class="task-count">{{getTaskCount(1)}} Aufgaben</div>
+        </div>
+    </div>
+
+
     @for(category of categories(); track category.id){
     <div class="category-item" (click)="toggleCategory(category.id)"
         [style.backgroundImage]="category.image ? 'url(' + category.image + ')' : null" 

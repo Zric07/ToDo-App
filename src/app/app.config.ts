@@ -6,9 +6,20 @@ import { DatabaseService } from './services/database';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideAppInitializer(() => {
+    provideAppInitializer(async () => {
       const db = inject(DatabaseService);
-      return db.init();
+      await db.init();
+      await checkDailyReset(db);
     })
   ]
+
 };
+
+async function checkDailyReset(db: DatabaseService) {
+    const today = new Date().toDateString();
+    const lastReset = localStorage.getItem('lastDailyReset');
+    if (lastReset !== today) {
+        await db.resetDailyTasks();
+        localStorage.setItem('lastDailyReset', today);
+    }
+}

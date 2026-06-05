@@ -59,6 +59,7 @@ export class DatabaseService {
         name TEXT NOT NULL,
         description TEXT,
         completed INTEGER DEFAULT 0,
+        daily INTEGER DEFAULT 0,
         categoryId INTEGER,
         FOREIGN KEY (categoryId) REFERENCES categories(id) ON DELETE CASCADE
       );
@@ -107,13 +108,14 @@ export class DatabaseService {
     return (result.values ?? []).map(t => ({ ...t, completed: t.completed === 1 }));
   }
 
-  async addTask(name: string, description: string, categoryId: number): Promise<void> {
+  async addTask(name: string, description: string, categoryId: number, daily: boolean): Promise<void> {
     await this.init();
-    if (this.db === null) {
-      throw new Error('Database not initialized');
-    }
-    await this.db.run('INSERT INTO tasks (name, description, completed, categoryId) VALUES (?, ?, 0, ?);', [name, description, categoryId]);
-  }
+    if (this.db === null) throw new Error('Database not initialized');
+    await this.db.run(
+        'INSERT INTO tasks (name, description, completed, daily, categoryId) VALUES (?, ?, 0, ?, ?);',
+        [name, description, daily ? 1 : 0, categoryId]
+    );
+}
 
   async editTask(id: number, name: string, description: string): Promise<void> {
     await this.init();
@@ -131,6 +133,16 @@ export class DatabaseService {
     await this.db.run('UPDATE tasks SET completed = ? WHERE id = ?;', [completed ? 1 : 0, id]);
   }
 
+  async resetDailyTasks(): Promise<void> {
+    await this.init();
+    if (this.db === null) {
+      throw new Error('Database not initialized');
+    }
+    await this.db.run(
+        'UPDATE tasks SET completed = 0 WHERE daily = 1;'
+    );
+}
+
   async deleteTask(id: number): Promise<void> {
     await this.init();
     if (this.db === null) {
@@ -145,6 +157,8 @@ export class DatabaseService {
       return [];
     }
     const result = await this.db.query('SELECT * FROM tasks ORDER BY id DESC;');
-    return (result.values ?? []).map(t => ({ ...t, completed: t.completed === 1 }));
+    return (result.values ?? []).map(t => ({ ...t, 
+    completed: t.completed === 1,
+    daily: t.daily === 1 }));
   }
 }
